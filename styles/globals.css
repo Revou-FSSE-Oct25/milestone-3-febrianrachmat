@@ -1,0 +1,23 @@
+body {
+font-family: Arial, sans-serif;
+}
+
+
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 20px;
+}
+
+
+.card {
+border: 1px solid #ddd;
+padding: 10px;
+}
+
+
+.card img {
+width: 100px;
+height: 100px;
+object-fit: contain;
+}
