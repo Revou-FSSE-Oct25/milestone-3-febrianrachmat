@@ -11,8 +11,14 @@ export default function Layout({ children }) {
         <Link href="/">Home</Link>
         <Link href="/promo">Promo</Link>
         <Link href="/faq">FAQ</Link>
-        <Link href="/cart">
-          Cart {cartCount > 0 && `(${cartCount})`}
+
+        <Link href="/cart" className="cart-link">
+          Cart
+          {cartCount > 0 && (
+            <span className="cart-badge">
+              {cartCount}
+            </span>
+          )}
         </Link>
       </nav>
 

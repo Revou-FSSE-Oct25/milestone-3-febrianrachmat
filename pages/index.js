@@ -7,9 +7,17 @@ export default function Home({ products }) {
       <h1>RevoShop Products</h1>
 
       <div className="grid">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {products.length === 0
+          ? Array.from({ length: 8 }).map((_, i) => (
+              <div className="card skeleton" key={i}>
+                <div className="skeleton-img"></div>
+                <div className="skeleton-text"></div>
+                <div className="skeleton-text small"></div>
+              </div>
+            ))
+          : products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
       </div>
     </Layout>
   );

@@ -19,9 +19,18 @@ return (
       <p className="product-desc">{product.description}</p>
       <div className="product-price">${product.price}</div>
 
-      <button onClick={() => addToCart(product)}>
+      <button
+        className="add-to-cart-btn"
+        onClick={(e) => {
+        e.currentTarget.classList.remove("added");
+        void e.currentTarget.offsetWidth; // reset animation
+        e.currentTarget.classList.add("added");
+        addToCart(product);
+        }}
+        >
         Add to Cart
-      </button>
+    </button>
+
     </div>
   </div>
 </Layout>

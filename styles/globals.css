@@ -140,6 +140,38 @@ h3 {
   font-size: 14px;
 }
 
+/* ===== ADD TO CART BUTTON ===== */
+.add-to-cart-btn {
+  padding: 14px 28px;
+  background: #111;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.15s ease;
+}
+
+.add-to-cart-btn.added {
+  animation: cart-bounce 0.35s ease;
+}
+
+/* ===== BUTTON ANIMATION ===== */
+@keyframes cart-bounce {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.92);
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 /* ===== CART ===== */
 .cart-list {
   display: flex;
@@ -214,4 +246,81 @@ h3 {
 
 .remove-btn:hover {
   color: #111;
+}
+
+/* ===== CART BADGE ===== */
+.cart-link {
+  position: relative;
+  padding-right: 8px;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -14px;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: badge-pop 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== BADGE ANIMATION ===== */
+@keyframes badge-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ===== SKELETON ===== */
+.skeleton {
+  border: 1px solid #eaeaea;
+  padding: 20px;
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 260px;
+  background: #eee;
+  margin-bottom: 16px;
+  animation: skeleton-pulse 1.2s infinite ease-in-out;
+}
+
+.skeleton-text {
+  height: 16px;
+  background: #eee;
+  margin-bottom: 10px;
+  animation: skeleton-pulse 1.2s infinite ease-in-out;
+}
+
+.skeleton-text.small {
+  width: 60%;
+}
+
+/* ===== SKELETON ANIMATION ===== */
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
 }
