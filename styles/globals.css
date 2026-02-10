@@ -1,23 +1,103 @@
+/* ===== RESET & BASE ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+  color: #111;
+  line-height: 1.6;
 }
 
+/* ===== LINKS ===== */
+a {
+  color: #111;
+  text-decoration: none;
+}
 
+a:hover {
+  text-decoration: underline;
+}
+
+/* ===== LAYOUT ===== */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* ===== NAVBAR ===== */
+nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 14px;
+}
+
+nav a {
+  font-weight: 500;
+}
+
+/* ===== HEADINGS ===== */
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ===== PRODUCT GRID ===== */
 .grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 32px;
 }
 
-
+/* ===== PRODUCT CARD ===== */
 .card {
-border: 1px solid #ddd;
-padding: 10px;
+  border: 1px solid #eaeaea;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #fff;
 }
 
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
 
 .card img {
-width: 100px;
-height: 100px;
-object-fit: contain;
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  margin-bottom: 16px;
+}
+
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* ===== BUTTON / LINK ===== */
+.card a {
+  margin-top: auto;
+  font-size: 14px;
 }

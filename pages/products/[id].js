@@ -9,13 +9,19 @@ const { addToCart } = useContext(CartContext);
 
 return (
 <Layout>
-<h1>{product.title}</h1>
-<img src={product.image} width="200" />
-<p>{product.description}</p>
-<h3>${product.price}</h3>
+  <div className="product-detail">
+    <img src={product.image} alt={product.title} />
 
+    <div>
+      <h1>{product.title}</h1>
+      <p>{product.description}</p>
+      <h3>${product.price}</h3>
 
-<button onClick={() => addToCart(product)}>Add to Cart</button>
+      <button onClick={() => addToCart(product)}>
+        Add to Cart
+      </button>
+    </div>
+  </div>
 </Layout>
 );
 }
