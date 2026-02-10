@@ -3,10 +3,15 @@ import Layout from "../components/layout";
 import { CartContext } from "../context/cartcontext";
 
 export default function CartPage() {
-  const { cart } = useContext(CartContext);
+  const {
+    cart,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+  } = useContext(CartContext);
 
   const totalPrice = cart.reduce(
-    (total, item) => total + item.price,
+    (total, item) => total + item.price * item.quantity,
     0
   );
 
@@ -19,12 +24,26 @@ export default function CartPage() {
       ) : (
         <>
           <div className="cart-list">
-            {cart.map((item, index) => (
-              <div className="cart-item" key={`${item.id}-${index}`}>
+            {cart.map((item) => (
+              <div className="cart-item" key={item.id}>
                 <img src={item.image} alt={item.title} />
-                <div>
+
+                <div className="cart-info">
                   <h3>{item.title}</h3>
                   <p>${item.price}</p>
+
+                  <div className="cart-qty">
+                    <button onClick={() => decreaseQty(item.id)}>-</button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => increaseQty(item.id)}>+</button>
+                  </div>
+
+                  <button
+                    className="remove-btn"
+                    onClick={() => removeItem(item.id)}
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             ))}

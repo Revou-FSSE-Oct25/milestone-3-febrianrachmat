@@ -177,3 +177,41 @@ h3 {
   font-weight: 700;
   text-align: right;
 }
+
+.cart-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cart-qty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cart-qty button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.cart-qty span {
+  font-weight: 600;
+}
+
+.remove-btn {
+  background: none;
+  color: #999;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+  text-align: left;
+}
+
+.remove-btn:hover {
+  color: #111;
+}
