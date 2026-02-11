@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`ProductCard Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="card"
+  >
+    <img
+      alt="Test Product"
+      src="test-image.jpg"
+    />
+    <h3>
+      Test Product
+    </h3>
+    <p>
+      $100
+    </p>
+    <a
+      href="/products/1"
+    >
+      View Detail
+    </a>
+  </div>
+</DocumentFragment>
+`;
