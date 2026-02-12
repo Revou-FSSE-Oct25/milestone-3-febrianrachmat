@@ -1,15 +1,15 @@
 import Layout from "../components/layout";
 import ProductCard from "../components/productcard";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
 
 export default function Home({ products }) {
-  const router = useRouter();
-
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      router.push("/login");
+    // Hanya jalan di browser (bukan saat test / SSR)
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("user");
+      if (!user) {
+        window.location.href = "/login";
+      }
     }
   }, []);
 

@@ -27,6 +27,11 @@ export function AuthProvider({ children }) {
 
       setUser(foundUser);
       localStorage.setItem("user", JSON.stringify(foundUser));
+
+      if (typeof document !== "undefined") {
+        document.cookie = "token=authenticated; path=/";
+      }
+
       return true;
     } catch (err) {
       console.error(err);
@@ -37,6 +42,10 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+
+    if (typeof document !== "undefined") {
+      document.cookie = "token=; Max-Age=0; path=/";
+    }
   };
 
   return (

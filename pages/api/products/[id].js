@@ -1,7 +1,9 @@
+import { getProducts, setProducts } from "./data";
+
 export default function handler(req, res) {
   const { id } = req.query;
+  const products = getProducts();
 
-  // GET PRODUCT BY ID
   if (req.method === "GET") {
     const product = products.find((p) => p.id === Number(id));
 
@@ -12,31 +14,29 @@ export default function handler(req, res) {
     return res.status(200).json(product);
   }
 
-  // UPDATE PRODUCT
   if (req.method === "PUT") {
     const { title, price } = req.body;
 
-    products = products.map((p) =>
+    const updatedProducts = products.map((p) =>
       p.id === Number(id)
         ? { ...p, title, price }
         : p
     );
 
-    return res.status(200).json({
-      message: "Product updated",
-      product: { id: Number(id), title, price },
-    });
+    setProducts(updatedProducts);
+
+    return res.status(200).json({ message: "Product updated" });
   }
 
-  // DELETE PRODUCT
   if (req.method === "DELETE") {
-    products = products.filter((p) => p.id !== Number(id));
+    const filteredProducts = products.filter(
+      (p) => p.id !== Number(id)
+    );
 
-    return res.status(200).json({
-      message: "Product deleted",
-    });
+    setProducts(filteredProducts);
+
+    return res.status(200).json({ message: "Product deleted" });
   }
 
-  // METHOD NOT ALLOWED
-  res.status(405).json({ message: "Method not allowed" });
+  return res.status(405).json({ message: "Method not allowed" });
 }
