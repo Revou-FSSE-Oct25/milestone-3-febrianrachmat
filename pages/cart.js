@@ -1,6 +1,6 @@
 import Layout from "../components/layout";
 import { useCart } from "../context/cartcontext";
-import { useContext } from "react";
+import { useRouter } from "next/router";
 
 export default function CartPage() {
   const {
@@ -8,8 +8,11 @@ export default function CartPage() {
     increaseQty,
     decreaseQty,
     removeFromCart,
+    clearCart,
     cartTotal,
   } = useCart();
+
+  const router = useRouter();
 
   if (cart.length === 0) {
     return (
@@ -37,11 +40,8 @@ export default function CartPage() {
           }}
         >
           <div style={{ display: "flex", gap: "20px" }}>
-            <img
-              src={item.image}
-              alt={item.title}
-              width="80"
-            />
+            <img src={item.image} width="80" />
+
             <div>
               <h3>{item.title}</h3>
               <p>${item.price}</p>
@@ -51,6 +51,12 @@ export default function CartPage() {
                 <span>{item.quantity}</span>
                 <button onClick={() => increaseQty(item.id)}>+</button>
               </div>
+
+              {/* Subtotal */}
+              <p style={{ marginTop: "10px", fontWeight: "bold" }}>
+                Subtotal: $
+                {(item.price * item.quantity).toFixed(2)}
+              </p>
             </div>
           </div>
 
@@ -70,13 +76,22 @@ export default function CartPage() {
         </div>
       ))}
 
-      <div
-        style={{
-          marginTop: "40px",
-          textAlign: "right",
-        }}
-      >
+      <div style={{ textAlign: "right", marginTop: "40px" }}>
         <h2>Total: ${cartTotal.toFixed(2)}</h2>
+
+        <button
+          style={{
+            marginRight: "10px",
+            background: "gray",
+            color: "white",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "6px",
+          }}
+          onClick={clearCart}
+        >
+          Clear Cart
+        </button>
 
         <button
           style={{
@@ -86,8 +101,8 @@ export default function CartPage() {
             border: "none",
             borderRadius: "8px",
             cursor: "pointer",
-            marginTop: "10px",
           }}
+          onClick={() => router.push("/checkout")}
         >
           Checkout
         </button>

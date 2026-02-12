@@ -45,6 +45,18 @@ nav a {
   font-weight: 500;
 }
 
+.nav-left {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
 /* ===== HEADINGS ===== */
 h1 {
   font-size: 32px;
@@ -264,7 +276,9 @@ h3 {
   font-weight: 600;
   width: 20px;
   height: 20px;
+  padding: 3px 7px;
   border-radius: 50%;
+  margin-left: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -479,4 +493,17 @@ h3 {
 
 .remove-btn:hover {
   background: #be123c;
+}
+
+.logout-btn {
+  background: crimson;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: darkred;
 }

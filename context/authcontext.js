@@ -28,9 +28,7 @@ export function AuthProvider({ children }) {
       setUser(foundUser);
       localStorage.setItem("user", JSON.stringify(foundUser));
 
-      if (typeof document !== "undefined") {
-        document.cookie = "token=authenticated; path=/";
-      }
+      document.cookie = "token=authenticated; path=/";
 
       return true;
     } catch (err) {
@@ -40,13 +38,10 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
+  setUser(null);
+  document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+};
 
-    if (typeof document !== "undefined") {
-      document.cookie = "token=; Max-Age=0; path=/";
-    }
-  };
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
