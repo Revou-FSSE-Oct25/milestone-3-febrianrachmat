@@ -1,36 +1,201 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RevoShop — Modern E-Commerce App (Next.js)
 
-## Getting Started
+RevoShop adalah aplikasi e-commerce modern yang dibangun menggunakan **Next.js**, dengan fitur autentikasi, shopping cart, protected checkout route menggunakan middleware.
 
-First, run the development server:
+---
+
+# Live Features
+
+## Authentication System
+
+- Login menggunakan FakeStoreAPI
+- Session disimpan menggunakan cookie
+- Logout functionality
+- Navbar menampilkan profile user setelah login
+
+## Shopping Cart
+
+- Add product ke cart
+- Increase / decrease quantity
+- Remove item
+- Clear cart
+- Subtotal per item
+- Cart total otomatis dihitung
+
+## Checkout System
+
+- Protected route menggunakan Next.js middleware
+- Hanya user yang login yang bisa mengakses `/checkout`
+- Redirect ke `/login` jika belum login
+
+## Modern UI
+
+- Modern responsive navbar
+- Profile avatar
+- Cart badge indicator
+
+---
+
+# Tech Stack
+
+- Next.js 16
+- React 19
+- JavaScript (ES6)
+- Next.js Middleware
+- React Context API
+- FakeStoreAPI
+- CSS (Custom styling)
+
+---
+
+# Authentication Flow
+
+```
+User login
+   ↓
+FakeStoreAPI validation
+   ↓
+Save token in cookie
+   ↓
+Middleware check cookie
+   ↓
+Allow / deny access to checkout
+```
+
+---
+
+# Cart State Management
+
+Menggunakan React Context:
+
+```
+CartContext
+ ├ addToCart()
+ ├ removeFromCart()
+ ├ increaseQty()
+ ├ decreaseQty()
+ ├ clearCart()
+ └ cartTotal
+```
+
+---
+
+# Protected Route with Middleware
+
+File:
+
+```
+middleware.js
+```
+
+Function:
+
+- Check apakah cookie `token` ada
+- Jika tidak ada → redirect ke `/login`
+- Jika ada → allow access
+
+Protected routes:
+
+```
+/checkout
+```
+
+---
+
+# Installation & Setup
+
+Clone repository:
+
+```bash
+git clone https://github.com/Revou-FSSE-Oct25/milestone-3-febrianrachmat.git
+```
+
+Masuk ke folder project:
+
+```bash
+cd milestone-3-febrianrachmat
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open browser:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# FakeStoreAPI Login Credential
 
-To learn more about Next.js, take a look at the following resources:
+Gunakan:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+Username: mor_2314
+Password: 83r5^_
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+atau
 
-## Deploy on Vercel
+```
+Username: johnd
+Password: m38rmF$
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Testing Flow
+
+Test scenario yang bisa dilakukan:
+
+### Authentication
+
+- Login success
+- Login fail
+- Logout
+
+### Cart
+
+- Add item
+- Increase quantity
+- Decrease quantity
+- Remove item
+- Clear cart
+
+### Protected Route
+
+- Access checkout without login → redirect login
+- Access checkout with login → allowed
+
+---
+
+# UI Preview
+
+Features include:
+
+- Modern navbar with profile avatar
+- Cart badge indicator
+- Product grid layout
+- Clean checkout page
+- Toast notification system
+
+---
+
+# Author
+
+**Rachmat Febrian**
+
+GitHub:
+https://github.com/Revou-FSSE-Oct25/milestone-3-febrianrachmat
+
+---
