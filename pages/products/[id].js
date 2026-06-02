@@ -1,9 +1,16 @@
 import Layout from "../../components/layout";
 import { useContext } from "react";
 import { CartContext } from "../../context/cartcontext";
+import { useToast } from "../../context/toastcontext";
 
 export default function ProductDetail({ product }) {
   const { addToCart } = useContext(CartContext);
+  const { showToast } = useToast();
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    showToast("Added to cart!");
+  };
 
   return (
     <Layout>
@@ -19,7 +26,7 @@ export default function ProductDetail({ product }) {
 
           <button
             className="add-to-cart-btn"
-            onClick={() => addToCart(product)}
+            onClick={handleAddToCart}
           >
             Add to Cart
           </button>

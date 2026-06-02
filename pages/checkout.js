@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { CartContext } from "../context/cartcontext";
+import { useToast } from "../context/toastcontext";
 import Layout from "../components/layout";
 import { useRouter } from "next/router";
 
 export default function Checkout() {
   const { cart, cartTotal, clearCart } = useContext(CartContext);
+  const { showToast } = useToast();
   const router = useRouter();
-
   if (cart.length === 0) {
     return (
       <Layout>
@@ -19,7 +20,7 @@ export default function Checkout() {
   }
 
   const handlePlaceOrder = () => {
-    alert("Order placed successfully!");
+    showToast("Order placed successfully!");
     clearCart();
     router.push("/");
   };
