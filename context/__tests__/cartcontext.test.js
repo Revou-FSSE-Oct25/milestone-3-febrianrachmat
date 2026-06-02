@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { CartProvider, useCart } from '../cartcontext'
 
 function TestComponent() {
-  const { cart, addToCart, removeFromCart, cartTotal, cartCount } = useCart()
+  const { cart, addToCart, decreaseQty, removeFromCart, cartTotal, cartCount } = useCart()
 
   return (
     <div>
@@ -13,6 +13,10 @@ function TestComponent() {
 
       <button onClick={() => addToCart({ id: 1, price: 10 })}>
         Add
+      </button>
+
+      <button onClick={() => decreaseQty(1)}>
+        Decrease
       </button>
 
       <button onClick={() => removeFromCart(1)}>
@@ -95,6 +99,23 @@ describe('CartContext', () => {
     expect(JSON.parse(localStorage.getItem('cart'))).toEqual([
       { id: 1, price: 10, quantity: 1 },
     ])
+  })
+
+  it('removes item when decreasing quantity from one', async () => {
+    render(
+      <CartProvider>
+        <TestComponent />
+      </CartProvider>
+    )
+
+    await userEvent.click(screen.getByText('Add'))
+    expect(screen.getByTestId('cart-length').textContent).toBe('1')
+
+    await userEvent.click(screen.getByText('Decrease'))
+
+    expect(screen.getByTestId('cart-length').textContent).toBe('0')
+    expect(screen.getByTestId('cart-count').textContent).toBe('0')
+    expect(screen.getByTestId('cart-total').textContent).toBe('0')
   })
 
 })
