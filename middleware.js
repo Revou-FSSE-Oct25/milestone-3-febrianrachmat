@@ -1,29 +1,28 @@
 import { NextResponse } from "next/server";
-import { isAdminUsername } from "./lib/admin-users";
+import { verifySessionToken, getSessionCookieName } from "./lib/auth-session";
 
 function isProtectedRoute(pathname) {
   return pathname === "/checkout" || pathname === "/orders" || pathname.startsWith("/admin");
 }
 
-export function middleware(req) {
+export async function middleware(req) {
   const pathname = req.nextUrl.pathname;
 
   if (!isProtectedRoute(pathname)) {
     return NextResponse.next();
   }
 
-  const token = req.cookies.get("token");
+  const token = req.cookies.get(getSessionCookieName())?.value;
+  const session = await verifySessionToken(token);
 
-  if (!token) {
+  if (!session) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
   if (pathname.startsWith("/admin")) {
-    const username = req.cookies.get("username")?.value;
-
-    if (!username || !isAdminUsername(username)) {
+    if (session.role !== "admin") {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }

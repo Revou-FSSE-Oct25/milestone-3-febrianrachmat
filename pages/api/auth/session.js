@@ -1,0 +1,23 @@
+import { verifySessionToken, getSessionCookieName } from "../../../lib/auth-session";
+
+export default async function handler(req, res) {
+  if (req.method !== "GET") {
+    return res.status(405).json({ message: "Method not allowed" });
+  }
+
+  const token = req.cookies?.[getSessionCookieName()];
+  const payload = await verifySessionToken(token);
+
+  if (!payload) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  return res.status(200).json({
+    user: {
+      id: Number(payload.sub),
+      username: payload.username,
+      email: payload.username,
+      role: payload.role,
+    },
+  });
+}

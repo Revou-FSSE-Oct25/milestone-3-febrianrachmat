@@ -1,24 +1,7 @@
 import { createContext, useState, useEffect, useContext, useMemo } from "react";
 import { isAdminUsername } from "../lib/admin-users";
-import { API_URLS } from "../lib/api-config";
-import { normalizeUserFromApi } from "../lib/normalize-api";
 
 export const AuthContext = createContext();
-
-function setAuthCookie(name, value) {
-  document.cookie = `${name}=${encodeURIComponent(value)}; path=/`;
-}
-
-function clearAuthCookie(name) {
-  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-}
-
-function getAuthCookie(name) {
-  const match = document.cookie.match(
-    new RegExp(`(?:^|; )${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}=([^;]*)`)
-  );
-  return match ? decodeURIComponent(match[1]) : null;
-}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
@@ -35,37 +18,51 @@ export function AuthProvider({ children }) {
   });
 
   useEffect(() => {
-    if (!user) return;
+    if (typeof window === "undefined") return;
 
-    if (!getAuthCookie("token")) {
-      setAuthCookie("token", "authenticated");
-      setAuthCookie("username", user.username);
-    }
-  }, [user]);
+    let isCancelled = false;
+    fetch("/api/auth/session")
+      .then(async (res) => {
+        if (!res.ok) {
+          localStorage.removeItem("user");
+          if (!isCancelled) setUser(null);
+          return;
+        }
+
+        const data = await res.json();
+        localStorage.setItem("user", JSON.stringify(data.user));
+        if (!isCancelled) setUser(data.user);
+      })
+      .catch(() => {
+        localStorage.removeItem("user");
+        if (!isCancelled) setUser(null);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   const isAdmin = useMemo(
-    () => (user ? isAdminUsername(user.username) : false),
+    () => (user ? user.role === "admin" || isAdminUsername(user.username) : false),
     [user]
   );
 
   const login = async (email, password) => {
     try {
-      const res = await fetch(API_URLS.users);
-      const users = await res.json();
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      const foundUser = users.find(
-        (candidate) => candidate.email === email && candidate.password === password
-      );
+      if (!res.ok) return false;
 
-      if (!foundUser) return false;
-
-      const normalizedUser = normalizeUserFromApi(foundUser);
-
-      setUser(normalizedUser);
-      localStorage.setItem("user", JSON.stringify(normalizedUser));
-
-      setAuthCookie("token", "authenticated");
-      setAuthCookie("username", normalizedUser.username);
+      const data = await res.json();
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
       return true;
     } catch (err) {
@@ -77,8 +74,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    clearAuthCookie("token");
-    clearAuthCookie("username");
+    fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
   };
 
   return (

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AuthProvider, useAuth } from "../authcontext";
 
@@ -26,29 +26,57 @@ function TestComponent() {
 describe("AuthContext", () => {
   beforeEach(() => {
     localStorage.clear();
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    document.cookie = "username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () =>
-          Promise.resolve([
-            {
-              id: 3,
-              email: "admin@mail.com",
-              password: "admin123",
-              name: "Admin",
-              role: "admin",
-            },
-            {
-              id: 1,
-              email: "john@mail.com",
-              password: "changeme",
-              name: "Jhon",
-              role: "customer",
-            },
-          ]),
-      })
-    );
+    global.fetch = jest.fn((url, options = {}) => {
+      if (url === "/api/auth/session") {
+        return Promise.resolve({ ok: false, json: () => Promise.resolve({}) });
+      }
+
+      if (url === "/api/auth/login") {
+        const body = JSON.parse(options.body ?? "{}");
+        if (body.email === "admin@mail.com" && body.password === "admin123") {
+          return Promise.resolve({
+            ok: true,
+            json: () =>
+              Promise.resolve({
+                user: {
+                  id: 3,
+                  email: "admin@mail.com",
+                  username: "admin@mail.com",
+                  name: "Admin",
+                  role: "admin",
+                },
+              }),
+          });
+        }
+
+        if (body.email === "john@mail.com" && body.password === "changeme") {
+          return Promise.resolve({
+            ok: true,
+            json: () =>
+              Promise.resolve({
+                user: {
+                  id: 1,
+                  email: "john@mail.com",
+                  username: "john@mail.com",
+                  name: "Jhon",
+                  role: "customer",
+                },
+              }),
+          });
+        }
+
+        return Promise.resolve({
+          ok: false,
+          json: () => Promise.resolve({ message: "Invalid email or password" }),
+        });
+      }
+
+      if (url === "/api/auth/logout") {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ success: true }) });
+      }
+
+      return Promise.reject(new Error(`Unhandled fetch url: ${url}`));
+    });
   });
 
   afterEach(() => {
@@ -78,7 +106,7 @@ describe("AuthContext", () => {
     expect(screen.getByTestId("name").textContent).toBe("Admin");
     expect(screen.getByTestId("is-admin").textContent).toBe("yes");
     expect(JSON.parse(localStorage.getItem("user")).email).toBe("admin@mail.com");
-    expect(document.cookie).toContain("username=admin%40mail.com");
+    expect(global.fetch).toHaveBeenCalledWith("/api/auth/login", expect.any(Object));
   });
 
   it("marks regular users as non-admin", async () => {
@@ -106,10 +134,10 @@ describe("AuthContext", () => {
 
     expect(screen.getByTestId("username").textContent).toBe("guest");
     expect(localStorage.getItem("user")).toBeNull();
-    expect(document.cookie).not.toContain("username=admin%40mail.com");
+    expect(global.fetch).toHaveBeenCalledWith("/api/auth/logout", { method: "POST" });
   });
 
-  it("restores auth cookie when localStorage has user but cookie is missing", async () => {
+  it("clears stale local storage when server session is missing", async () => {
     localStorage.setItem(
       "user",
       JSON.stringify({
@@ -126,8 +154,9 @@ describe("AuthContext", () => {
       </AuthProvider>
     );
 
-    expect(await screen.findByTestId("username")).toHaveTextContent("john@mail.com");
-    expect(document.cookie).toContain("token=authenticated");
-    expect(document.cookie).toContain("username=john%40mail.com");
+    await waitFor(() => {
+      expect(screen.getByTestId("username")).toHaveTextContent("guest");
+      expect(localStorage.getItem("user")).toBeNull();
+    });
   });
 });
