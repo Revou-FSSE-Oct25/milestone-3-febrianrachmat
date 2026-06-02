@@ -30,6 +30,7 @@ describe('Home Page', () => {
 
     expect(screen.getByText('RevoShop')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '🛒' })).toHaveAttribute('href', '/cart')
+    expect(screen.getByRole('link', { name: 'Login' })).toHaveAttribute('href', '/login')
   })
 
   it('shows cart badge when cart has items in localStorage', async () => {

@@ -22,7 +22,14 @@ export default function LoginPage() {
     setLoading(false);
 
     if (success) {
-      router.push("/checkout");
+      const redirect =
+        typeof router.query.redirect === "string" ? router.query.redirect : "/";
+      const safeRedirect =
+        redirect.startsWith("/") && !redirect.startsWith("//")
+          ? redirect
+          : "/";
+
+      router.push(safeRedirect);
     } else {
       setError("Invalid username or password");
     }

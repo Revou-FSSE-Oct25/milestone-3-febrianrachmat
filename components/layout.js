@@ -45,7 +45,7 @@ export default function Layout({ children }) {
         )}
       </Link>
 
-      {user && (
+      {user ? (
         <div className="profile-wrapper" ref={dropdownRef}>
           <div
             className="avatar"
@@ -78,6 +78,10 @@ export default function Layout({ children }) {
             </div>
           )}
         </div>
+      ) : (
+        <Link href="/login" className="nav-login">
+          Login
+        </Link>
       )}
     </div>
 

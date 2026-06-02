@@ -79,6 +79,21 @@ main {
   opacity: 0.6;
 }
 
+.nav-login {
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 16px;
+  border: 1px solid #111;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.nav-login:hover {
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+}
+
 /* RIGHT SIDE */
 .nav-right {
   display: flex;
