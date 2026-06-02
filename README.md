@@ -9,7 +9,7 @@ RevoShop adalah aplikasi e-commerce modern yang dibangun menggunakan **Next.js**
 ## Authentication System
 
 - Login menggunakan data user dari Escuela JS API (`api.escuelajs.co`)
-- Session disimpan di cookie (`token`, `username`) + user state di `localStorage`
+- Session disimpan sebagai **signed HttpOnly cookie** (`session`) dari server + user state di `localStorage`
 - Logout functionality
 - Navbar menampilkan profile user setelah login
 
@@ -82,11 +82,13 @@ Aplikasi ini memenuhi requirement Module 4 dengan **empat pola rendering** yang 
 ```
 User login
    ↓
+POST /api/auth/login
+   ↓
 Escuela JS API user validation (email + password)
    ↓
-Save token in cookie
+Server membuat signed session token (HMAC) + set HttpOnly cookie
    ↓
-Middleware check cookie
+Middleware verify signature + expiry
    ↓
 Allow / deny access to protected routes
 ```
@@ -119,9 +121,9 @@ middleware.js
 
 Function:
 
-- Check apakah cookie `token` ada
-- Jika tidak ada → redirect ke `/login`
-- Jika ada → allow access
+- Verifikasi cookie `session` (signed token + expiry) di server
+- Jika invalid/expired/tidak ada → redirect ke `/login`
+- Untuk `/admin*`, akses hanya diizinkan jika role session adalah `admin`
 
 Protected routes:
 
@@ -167,6 +169,13 @@ Install dependencies:
 
 ```bash
 npm install
+```
+
+Buat environment variable untuk session secret (wajib untuk production):
+
+```bash
+# .env.local
+AUTH_SESSION_SECRET=replace-with-random-long-secret
 ```
 
 Run development server:
@@ -217,7 +226,7 @@ Coverage utama:
 |------|-----------|
 | Home page & ISR | `__tests__/pages/index.test.js` |
 | Cart & auth context | `context/__tests__/cartcontext.test.js`, `context/__tests__/authcontext.test.js` |
-| Middleware (protected routes) | `middleware.test.js` |
+| Middleware + session verification | `middleware.test.js` |
 | Checkout & order flow | `lib/__tests__/order-storage.test.js` — validasi form (`validateCheckoutForm`), simpan order, payload checkout |
 | Product API & normalisasi | `lib/__tests__/fetch-product.test.js`, `lib/__tests__/normalize-api.test.js` |
 
@@ -253,6 +262,7 @@ Test scenario yang bisa dilakukan:
 - Access checkout with login → allowed
 - Access `/orders` without login → redirect login
 - Access `/admin` without admin role → redirect ke home
+- Session cookie manual tanpa signature valid → tetap ditolak middleware/API
 
 ---
 
