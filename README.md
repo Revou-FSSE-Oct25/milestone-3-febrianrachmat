@@ -8,8 +8,8 @@ RevoShop adalah aplikasi e-commerce modern yang dibangun menggunakan **Next.js**
 
 ## Authentication System
 
-- Login menggunakan FakeStoreAPI
-- Session disimpan menggunakan cookie
+- Login menggunakan data user dari Escuela JS API (`api.escuelajs.co`)
+- Session disimpan di cookie (`token`, `username`) + user state di `localStorage`
 - Logout functionality
 - Navbar menampilkan profile user setelah login
 
@@ -46,7 +46,7 @@ RevoShop adalah aplikasi e-commerce modern yang dibangun menggunakan **Next.js**
 - JavaScript (ES6)
 - Next.js Middleware
 - React Context API
-- FakeStoreAPI
+- Escuela JS API
 - CSS (Custom styling)
 
 ---
@@ -82,13 +82,13 @@ Aplikasi ini memenuhi requirement Module 4 dengan **empat pola rendering** yang 
 ```
 User login
    ↓
-FakeStoreAPI validation
+Escuela JS API user validation (email + password)
    ↓
 Save token in cookie
    ↓
 Middleware check cookie
    ↓
-Allow / deny access to checkout
+Allow / deny access to protected routes
 ```
 
 ---
@@ -127,6 +127,9 @@ Protected routes:
 
 ```
 /checkout
+/orders
+/admin
+/admin/*
 ```
 
 ---
@@ -180,20 +183,20 @@ http://localhost:3000
 
 ---
 
-# FakeStoreAPI Login Credential
+# Demo Login Credentials
 
-Gunakan:
-
-```
-Username: mor_2314
-Password: 83r5^_
-```
-
-atau
+Gunakan email/password berikut saat demo:
 
 ```
-Username: johnd
-Password: m38rmF$
+User:
+Email: john@mail.com
+Password: changeme
+```
+
+```
+Admin (bonus CRUD):
+Email: admin@mail.com
+Password: admin123
 ```
 
 ---
@@ -248,6 +251,8 @@ Test scenario yang bisa dilakukan:
 
 - Access checkout without login → redirect login
 - Access checkout with login → allowed
+- Access `/orders` without login → redirect login
+- Access `/admin` without admin role → redirect ke home
 
 ---
 
