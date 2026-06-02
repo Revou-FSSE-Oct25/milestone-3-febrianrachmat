@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Layout from "../components/layout";
 import { getOrders } from "../lib/order-storage";
 
@@ -11,11 +11,7 @@ function formatPaymentMethod(method) {
 }
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState([]);
-
-  useEffect(() => {
-    setOrders(getOrders());
-  }, []);
+  const [orders] = useState(getOrders);
 
   return (
     <Layout>

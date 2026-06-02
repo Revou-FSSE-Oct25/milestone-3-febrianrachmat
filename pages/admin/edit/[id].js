@@ -17,9 +17,6 @@ export default function EditProduct() {
   useEffect(() => {
     if (!id) return;
 
-    setLoadingProduct(true);
-    setLoadError(null);
-
     fetch(`/api/products/${id}`)
       .then(async (res) => {
         const data = await res.json();

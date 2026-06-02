@@ -16,18 +16,12 @@ function readCartFromStorage() {
 }
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [cart, setCart] = useState(readCartFromStorage);
 
   useEffect(() => {
-    setCart(readCartFromStorage());
-    setIsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isHydrated) return;
+    if (typeof window === "undefined") return;
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-  }, [cart, isHydrated]);
+  }, [cart]);
 
   const addToCart = (product) => {
     setCart((prev) => {

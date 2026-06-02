@@ -21,23 +21,27 @@ function getAuthCookie(name) {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const [user, setUser] = useState(() => {
+    if (typeof window === "undefined") return null;
 
     const storedUser = localStorage.getItem("user");
-    if (!storedUser) return;
+    if (!storedUser) return null;
 
-    const parsedUser = JSON.parse(storedUser);
+    try {
+      return JSON.parse(storedUser);
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    if (!user) return;
 
     if (!getAuthCookie("token")) {
       setAuthCookie("token", "authenticated");
-      setAuthCookie("username", parsedUser.username);
+      setAuthCookie("username", user.username);
     }
-
-    setUser(parsedUser);
-  }, []);
+  }, [user]);
 
   const isAdmin = useMemo(
     () => (user ? isAdminUsername(user.username) : false),

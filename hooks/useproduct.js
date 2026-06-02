@@ -4,8 +4,10 @@ export default function useProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const refetch = useCallback(() => {
-    setLoading(true);
+  const fetchProducts = useCallback((setLoadingOnStart = true) => {
+    if (setLoadingOnStart) {
+      setLoading(true);
+    }
 
     return fetch("/api/products")
       .then((res) => res.json())
@@ -13,9 +15,15 @@ export default function useProducts() {
       .finally(() => setLoading(false));
   }, []);
 
+  const refetch = useCallback(() => {
+    return fetchProducts(true);
+  }, [fetchProducts]);
+
   useEffect(() => {
-    refetch();
-  }, [refetch]);
+    // Initial data load for this hook is intentionally triggered on mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchProducts(false);
+  }, [fetchProducts]);
 
   return { products, refetch, loading };
 }

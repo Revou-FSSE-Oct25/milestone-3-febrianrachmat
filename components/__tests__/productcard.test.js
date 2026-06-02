@@ -2,9 +2,12 @@ import { render, screen } from "@testing-library/react";
 import ProductCard from "../productcard";
 
 jest.mock("next/link", () => {
-  return ({ children, href }) => {
+  const MockNextLink = ({ children, href }) => {
     return <a href={href}>{children}</a>;
   };
+
+  MockNextLink.displayName = "MockNextLink";
+  return MockNextLink;
 });
 
 describe("ProductCard Component", () => {
