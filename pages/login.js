@@ -67,6 +67,18 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        <div className="mt-8 rounded-md bg-gray-100 p-4 text-sm text-gray-600">
+          <p className="mb-2 font-semibold text-gray-800">Demo credentials</p>
+          <p>
+            User: <span className="font-mono">john@mail.com</span> /{" "}
+            <span className="font-mono">changeme</span>
+          </p>
+          <p>
+            Admin: <span className="font-mono">admin@mail.com</span> /{" "}
+            <span className="font-mono">admin123</span>
+          </p>
+        </div>
       </div>
     </Layout>
   );

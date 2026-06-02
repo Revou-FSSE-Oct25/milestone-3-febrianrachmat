@@ -69,7 +69,6 @@ export default function Checkout() {
     clearCart();
     showToast("Order placed successfully!");
     router.push("/orders");
-    setLoading(false);
   };
 
   return (

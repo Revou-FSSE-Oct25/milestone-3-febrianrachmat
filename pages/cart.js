@@ -21,6 +21,13 @@ export default function CartPage() {
         <div className="py-10">
           <h1 className="mb-8 text-4xl font-bold">Shopping Cart</h1>
           <p className="text-lg text-gray-500">Your cart is empty</p>
+          <button
+            type="button"
+            className={`${primaryBtnClass} mt-6`}
+            onClick={() => router.push("/")}
+          >
+            Continue Shopping
+          </button>
         </div>
       </Layout>
     );
