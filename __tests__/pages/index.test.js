@@ -19,6 +19,15 @@ describe('Home Page', () => {
     expect(screen.getByText('Product 2')).toBeInTheDocument()
   })
 
+  it('does not require login to browse products', () => {
+    localStorage.clear()
+
+    renderWithProviders(<Home products={mockProducts} />)
+
+    expect(screen.getByText('RevoShop Products')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Login' })).toBeInTheDocument()
+  })
+
   it('renders empty state', () => {
     renderWithProviders(<Home products={[]} />)
 

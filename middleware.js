@@ -1,9 +1,18 @@
 import { NextResponse } from "next/server";
 import { isAdminUsername } from "./lib/admin-users";
 
+function isProtectedRoute(pathname) {
+  return pathname === "/checkout" || pathname.startsWith("/admin");
+}
+
 export function middleware(req) {
-  const token = req.cookies.get("token");
   const pathname = req.nextUrl.pathname;
+
+  if (!isProtectedRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  const token = req.cookies.get("token");
 
   if (!token) {
     const loginUrl = new URL("/login", req.url);
