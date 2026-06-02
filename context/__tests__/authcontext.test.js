@@ -108,4 +108,26 @@ describe("AuthContext", () => {
     expect(localStorage.getItem("user")).toBeNull();
     expect(document.cookie).not.toContain("username=admin%40mail.com");
   });
+
+  it("restores auth cookie when localStorage has user but cookie is missing", async () => {
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        id: 1,
+        username: "john@mail.com",
+        name: "Jhon",
+        role: "customer",
+      })
+    );
+
+    render(
+      <AuthProvider>
+        <TestComponent />
+      </AuthProvider>
+    );
+
+    expect(await screen.findByTestId("username")).toHaveTextContent("john@mail.com");
+    expect(document.cookie).toContain("token=authenticated");
+    expect(document.cookie).toContain("username=john%40mail.com");
+  });
 });

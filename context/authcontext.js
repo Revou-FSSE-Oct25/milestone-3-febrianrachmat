@@ -13,16 +13,30 @@ function clearAuthCookie(name) {
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 }
 
+function getAuthCookie(name) {
+  const match = document.cookie.match(
+    new RegExp(`(?:^|; )${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}=([^;]*)`)
+  );
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
+    if (typeof window === "undefined") return;
+
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return;
+
+    const parsedUser = JSON.parse(storedUser);
+
+    if (!getAuthCookie("token")) {
+      setAuthCookie("token", "authenticated");
+      setAuthCookie("username", parsedUser.username);
     }
+
+    setUser(parsedUser);
   }, []);
 
   const isAdmin = useMemo(

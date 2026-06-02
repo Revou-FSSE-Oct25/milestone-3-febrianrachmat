@@ -50,18 +50,27 @@ RevoShop adalah aplikasi e-commerce modern yang dibangun menggunakan **Next.js**
 
 # Rendering Strategy (Module 4)
 
-Ringkasan pola rendering di aplikasi ini:
+Aplikasi ini memenuhi requirement Module 4 dengan **empat pola rendering** yang sengaja dipisah per halaman — tidak ada perubahan strategi di kode, hanya pemetaan berikut:
 
-| Halaman | Pola | Implementasi |
-|---------|------|----------------|
-| `/` (Home) | **ISR** (SSG + revalidate) | `getStaticProps` + `revalidate: 60` |
-| `/promo`, `/faq` | **SSG** | `getStaticProps` — konten statis di-generate saat build |
-| `/products/[id]` | **SSR** | `getServerSideProps` — data produk di-fetch di server pada setiap request |
-| `/cart`, `/admin`, `/login`, dll. | **CSR** | React Context + `fetch` di client |
+| Halaman | Pola | File | Implementasi |
+|---------|------|------|--------------|
+| `/` (Home) | **ISR** (SSG + revalidate) | `pages/index.js` | `getStaticProps` + `revalidate: 60` — katalog di-generate saat build, lalu di-regenerate maksimal setiap 60 detik |
+| `/promo`, `/faq` | **SSG** | `pages/promo.js`, `pages/faq.js` | `getStaticProps` — konten statis murni, di-generate sekali saat build |
+| `/products/[id]` | **SSR** | `pages/products/[id].js` | `getServerSideProps` — data produk di-fetch di server **pada setiap request** |
+| `/cart`, `/checkout`, `/login`, `/orders`, `/admin/*` | **CSR** | masing-masing di `pages/` | Tidak memakai `getStaticProps` / `getServerSideProps`; state & interaksi via React Context + `fetch` di browser |
 
-**Product detail memakai SSR** sesuai brief Module 4: harga dan stok (data produk) diambil fresh dari FakeStoreAPI saat user membuka halaman, bukan dari cache build statis.
+### Mengapa pemisahan ini?
 
-Home tetap memakai ISR agar daftar produk cepat di-load dengan regenerasi berkala (60 detik), sementara halaman detail memenuikan requirement SSR secara eksplisit.
+- **ISR (Home)** — daftar produk cepat di-load dari halaman statis, dengan pembaruan berkala tanpa fetch penuh di setiap kunjungan.
+- **SSG (Promo & FAQ)** — konten marketing/informasi tidak berubah per user; cocok di-cache saat build.
+- **SSR (Product detail)** — sesuai brief Module 4: **harga dan data produk selalu fresh** saat user membuka halaman. Data diambil dari [Escuela JS API](https://api.escuelajs.co) lewat `lib/fetch-product.js` (`cache: "no-store"`), bukan dari cache build statis.
+- **CSR (Cart, auth, admin, dll.)** — halaman interaktif yang bergantung pada session user, cart di `localStorage`, atau form CRUD admin.
+
+### Cara verifikasi saat demo / review
+
+1. `npm run build` — pastikan build sukses; route `/`, `/promo`, `/faq` muncul sebagai static/ISR, `/products/[id]` sebagai SSR (`λ`).
+2. Buka `/products/1` → refresh → harga/detail selalu di-render ulang di server (`getServerSideProps`).
+3. Buka `/` → konten katalog dari ISR; perubahan katalog terbaru muncul setelah window revalidate (60 detik) atau rebuild.
 
 ---
 
