@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect, useContext, useMemo } from "react";
 import { isAdminUsername } from "../lib/admin-users";
+import { API_URLS } from "../lib/api-config";
+import { normalizeUserFromApi } from "../lib/normalize-api";
 
 export const AuthContext = createContext();
 
@@ -28,22 +30,24 @@ export function AuthProvider({ children }) {
     [user]
   );
 
-  const login = async (username, password) => {
+  const login = async (email, password) => {
     try {
-      const res = await fetch("https://fakestoreapi.com/users");
+      const res = await fetch(API_URLS.users);
       const users = await res.json();
 
       const foundUser = users.find(
-        (u) => u.username === username && u.password === password
+        (candidate) => candidate.email === email && candidate.password === password
       );
 
       if (!foundUser) return false;
 
-      setUser(foundUser);
-      localStorage.setItem("user", JSON.stringify(foundUser));
+      const normalizedUser = normalizeUserFromApi(foundUser);
+
+      setUser(normalizedUser);
+      localStorage.setItem("user", JSON.stringify(normalizedUser));
 
       setAuthCookie("token", "authenticated");
-      setAuthCookie("username", foundUser.username);
+      setAuthCookie("username", normalizedUser.username);
 
       return true;
     } catch (err) {

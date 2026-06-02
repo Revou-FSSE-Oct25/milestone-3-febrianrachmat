@@ -57,7 +57,7 @@ describe('Middleware', () => {
       nextUrl: { pathname: '/admin' },
       cookies: mockCookies({
         token: 'authenticated',
-        username: 'johnd',
+        username: 'john@mail.com',
       }),
     }
 
@@ -75,7 +75,7 @@ describe('Middleware', () => {
       nextUrl: { pathname: '/admin' },
       cookies: mockCookies({
         token: 'authenticated',
-        username: 'mor_2314',
+        username: 'admin@mail.com',
       }),
     }
 

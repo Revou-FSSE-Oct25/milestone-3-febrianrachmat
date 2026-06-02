@@ -3,20 +3,24 @@ import userEvent from "@testing-library/user-event";
 import Home from "../../pages/index";
 import { renderWithProviders } from "../../test-utils/renderWithProviders";
 
+jest.mock("../../lib/fetch-categories", () => ({
+  fetchCategories: jest.fn().mockResolvedValue([]),
+}));
+
 const mockProducts = [
   {
     id: 1,
     title: "Product 1",
     price: 100,
     category: "bags",
-    image: "https://fakestoreapi.com/img/product-1.jpg",
+    image: "https://i.imgur.com/product-1.jpg",
   },
   {
     id: 2,
     title: "Product 2",
     price: 200,
     category: "clothing",
-    image: "https://fakestoreapi.com/img/product-2.jpg",
+    image: "https://i.imgur.com/product-2.jpg",
   },
 ];
 

@@ -1,9 +1,10 @@
+import Link from "next/link";
 import Layout from "../../components/layout";
-import Image from "next/image";
+import ProductImage from "../../components/productimage";
 import { useCart } from "../../context/cartcontext";
 import { useToast } from "../../context/toastcontext";
 
-export default function ProductDetail({ product }) {
+export default function ProductDetailPage({ product }) {
   const { addToCart } = useCart();
   const { showToast } = useToast();
 
@@ -17,12 +18,10 @@ export default function ProductDetail({ product }) {
       <div className="grid items-start gap-16 md:grid-cols-[420px_1fr]">
         <div>
           <div className="relative h-[420px] w-full">
-            <Image
+            <ProductImage
               src={product.image}
               alt={product.title}
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, 420px"
+              productId={product.id}
               priority
             />
           </div>
@@ -47,11 +46,8 @@ export default function ProductDetail({ product }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const { bootstrapProducts, getProductById } = await import("../../lib/products-data");
-
-  await bootstrapProducts();
-
-  const product = getProductById(params.id);
+  const { fetchProductForDetail } = await import("../../lib/fetch-product");
+  const product = await fetchProductForDetail(params.id);
 
   if (!product) {
     return { notFound: true };

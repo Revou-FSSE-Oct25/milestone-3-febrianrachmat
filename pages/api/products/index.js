@@ -1,21 +1,14 @@
 import {
   bootstrapProducts,
   getProducts,
-  setProducts,
+  addProduct,
 } from "../../../lib/products-data";
 import { requireAdmin } from "../../../lib/require-admin";
 import {
   normalizeProductFields,
   validateProductInput,
 } from "../../../lib/validate-product";
-
-async function revalidateHome(res) {
-  try {
-    await res.revalidate("/");
-  } catch {
-    // ISR revalidation is best-effort in local dev
-  }
-}
+import { revalidateCatalogPages } from "../../../lib/revalidate-pages";
 
 export default async function handler(req, res) {
   await bootstrapProducts();
@@ -38,9 +31,8 @@ export default async function handler(req, res) {
       ...normalizeProductFields(req.body),
     };
 
-    const products = getProducts();
-    setProducts([...products, newProduct]);
-    await revalidateHome(res);
+    addProduct(newProduct);
+    await revalidateCatalogPages(res, newProduct.id);
 
     return res.status(201).json(newProduct);
   }

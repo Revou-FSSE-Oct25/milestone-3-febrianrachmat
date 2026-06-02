@@ -1,5 +1,5 @@
 import Layout from "../components/layout";
-import Image from "next/image";
+import ProductImage from "../components/productimage";
 import { useCart } from "../context/cartcontext";
 import { useRouter } from "next/router";
 
@@ -39,12 +39,10 @@ export default function CartPage() {
             >
               <div className="flex flex-1 items-center gap-5">
                 <div className="relative h-[100px] w-[100px] shrink-0">
-                  <Image
+                  <ProductImage
                     src={item.image}
                     alt={item.title}
-                    fill
-                    className="object-contain"
-                    sizes="100px"
+                    productId={item.id}
                   />
                 </div>
 

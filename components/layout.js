@@ -76,7 +76,7 @@ export default function Layout({ children }) {
                   aria-haspopup="true"
                   aria-label="User menu"
                 >
-                  {user.username?.charAt(0).toUpperCase()}
+                  {user.name?.charAt(0).toUpperCase() || user.username?.charAt(0).toUpperCase()}
                 </button>
 
                 {open && (
@@ -85,7 +85,7 @@ export default function Layout({ children }) {
                     role="menu"
                   >
                     <div className="mb-2 border-b border-gray-200 p-2 font-semibold">
-                      👤 {user.username}
+                      👤 {user.name || user.username}
                     </div>
 
                     <Link

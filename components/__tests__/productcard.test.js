@@ -12,7 +12,7 @@ describe("ProductCard Component", () => {
     id: 1,
     title: "Test Product",
     price: 100,
-    image: "test-image.jpg",
+    image: "https://i.imgur.com/sample.jpg",
   };
 
   it("renders product title", () => {
@@ -33,7 +33,7 @@ describe("ProductCard Component", () => {
 
   it("renders correct product link", () => {
     render(<ProductCard product={mockProduct} />);
-    const link = screen.getByText("View Detail");
+    const link = screen.getByRole("link", { name: /view detail/i });
     expect(link).toHaveAttribute("href", "/products/1");
   });
 

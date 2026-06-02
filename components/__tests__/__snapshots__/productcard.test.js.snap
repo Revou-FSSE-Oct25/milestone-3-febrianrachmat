@@ -2,33 +2,35 @@
 
 exports[`ProductCard Component matches snapshot 1`] = `
 <DocumentFragment>
-  <div
-    class="flex flex-col border border-gray-200 bg-white p-5 transition hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)]"
+  <a
+    href="/products/1"
   >
     <div
       class="relative mb-4 h-[260px] w-full"
     >
       <img
         alt="Test Product"
-        class="object-contain"
-        src="test-image.jpg"
+        class="absolute inset-0 h-full w-full object-contain "
+        decoding="async"
+        loading="lazy"
+        src="https://i.imgur.com/sample.jpg"
       />
     </div>
     <h3
-      class="mb-2 line-clamp-2 text-base font-semibold"
+      class="mb-2 line-clamp-2 text-base font-semibold text-black"
     >
       Test Product
     </h3>
     <p
-      class="mb-3 font-semibold"
+      class="mb-3 font-semibold text-black"
     >
       $100
     </p>
-    <a
-      href="/products/1"
+    <span
+      class="mt-auto text-sm text-black hover:underline"
     >
       View Detail
-    </a>
-  </div>
+    </span>
+  </a>
 </DocumentFragment>
 `;

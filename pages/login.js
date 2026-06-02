@@ -7,7 +7,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
-    const success = await login(username, password);
+    const success = await login(email, password);
 
     setLoading(false);
 
@@ -29,7 +29,7 @@ export default function LoginPage() {
 
       router.push(safeRedirect);
     } else {
-      setError("Invalid username or password");
+      setError("Invalid email or password");
     }
   };
 
@@ -40,10 +40,10 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="rounded-md border border-gray-300 px-3 py-3"
             required
           />

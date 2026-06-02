@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ProductCard from "./productcard";
 import { filterAndSortProducts, getProductCategories } from "../lib/filter-products";
+import { fetchCategories } from "../lib/fetch-categories";
 
 function ProductSkeleton() {
   return (
@@ -19,8 +20,16 @@ export default function ProductCatalog({ products, usedFallback = false }) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("default");
+  const [apiCategories, setApiCategories] = useState([]);
 
-  const categories = useMemo(() => getProductCategories(products), [products]);
+  useEffect(() => {
+    fetchCategories().then(setApiCategories);
+  }, []);
+
+  const categories = useMemo(() => {
+    const merged = new Set([...apiCategories, ...getProductCategories(products)]);
+    return [...merged].sort();
+  }, [apiCategories, products]);
 
   const filteredProducts = useMemo(
     () => filterAndSortProducts(products, { search, category, sort }),

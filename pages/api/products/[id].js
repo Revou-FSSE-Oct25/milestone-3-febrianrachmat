@@ -1,22 +1,16 @@
 import {
   bootstrapProducts,
   getProductById,
-  getProducts,
-  setProducts,
+  updateProduct,
+  removeProduct,
 } from "../../../lib/products-data";
+import { fetchProductFromApi } from "../../../lib/fetch-product";
 import { requireAdmin } from "../../../lib/require-admin";
 import {
   normalizeProductFields,
   validateProductInput,
 } from "../../../lib/validate-product";
-
-async function revalidateHome(res) {
-  try {
-    await res.revalidate("/");
-  } catch {
-    // ISR revalidation is best-effort in local dev
-  }
-}
+import { revalidateCatalogPages } from "../../../lib/revalidate-pages";
 
 export default async function handler(req, res) {
   await bootstrapProducts();
@@ -25,7 +19,11 @@ export default async function handler(req, res) {
   const productId = Number(id);
 
   if (req.method === "GET") {
-    const product = getProductById(productId);
+    let product = getProductById(productId);
+
+    if (!product) {
+      product = await fetchProductFromApi(productId);
+    }
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -49,13 +47,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: validationError });
     }
 
-    const products = getProducts();
-    const updatedProducts = products.map((p) =>
-      p.id === productId ? { ...p, ...normalizeProductFields(req.body) } : p
-    );
-
-    setProducts(updatedProducts);
-    await revalidateHome(res);
+    updateProduct(productId, normalizeProductFields(req.body));
+    await revalidateCatalogPages(res, productId);
 
     return res.status(200).json({ message: "Product updated" });
   }
@@ -69,10 +62,8 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const filteredProducts = getProducts().filter((p) => p.id !== productId);
-
-    setProducts(filteredProducts);
-    await revalidateHome(res);
+    removeProduct(productId);
+    await revalidateCatalogPages(res, productId);
 
     return res.status(200).json({ message: "Product deleted" });
   }

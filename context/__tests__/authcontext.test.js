@@ -8,11 +8,12 @@ function TestComponent() {
   return (
     <div>
       <span data-testid="username">{user?.username ?? "guest"}</span>
+      <span data-testid="name">{user?.name ?? "guest"}</span>
       <span data-testid="is-admin">{isAdmin ? "yes" : "no"}</span>
-      <button type="button" onClick={() => login("mor_2314", "83r5^_")}>
+      <button type="button" onClick={() => login("admin@mail.com", "admin123")}>
         Login Admin
       </button>
-      <button type="button" onClick={() => login("johnd", "m38rmF$")}>
+      <button type="button" onClick={() => login("john@mail.com", "changeme")}>
         Login User
       </button>
       <button type="button" onClick={logout}>
@@ -31,8 +32,20 @@ describe("AuthContext", () => {
       Promise.resolve({
         json: () =>
           Promise.resolve([
-            { id: 1, username: "mor_2314", password: "83r5^_" },
-            { id: 2, username: "johnd", password: "m38rmF$" },
+            {
+              id: 3,
+              email: "admin@mail.com",
+              password: "admin123",
+              name: "Admin",
+              role: "admin",
+            },
+            {
+              id: 1,
+              email: "john@mail.com",
+              password: "changeme",
+              name: "Jhon",
+              role: "customer",
+            },
           ]),
       })
     );
@@ -61,10 +74,11 @@ describe("AuthContext", () => {
 
     await userEvent.click(screen.getByText("Login Admin"));
 
-    expect(screen.getByTestId("username").textContent).toBe("mor_2314");
+    expect(screen.getByTestId("username").textContent).toBe("admin@mail.com");
+    expect(screen.getByTestId("name").textContent).toBe("Admin");
     expect(screen.getByTestId("is-admin").textContent).toBe("yes");
-    expect(JSON.parse(localStorage.getItem("user")).username).toBe("mor_2314");
-    expect(document.cookie).toContain("username=mor_2314");
+    expect(JSON.parse(localStorage.getItem("user")).email).toBe("admin@mail.com");
+    expect(document.cookie).toContain("username=admin%40mail.com");
   });
 
   it("marks regular users as non-admin", async () => {
@@ -76,7 +90,7 @@ describe("AuthContext", () => {
 
     await userEvent.click(screen.getByText("Login User"));
 
-    expect(screen.getByTestId("username").textContent).toBe("johnd");
+    expect(screen.getByTestId("username").textContent).toBe("john@mail.com");
     expect(screen.getByTestId("is-admin").textContent).toBe("no");
   });
 
@@ -92,6 +106,6 @@ describe("AuthContext", () => {
 
     expect(screen.getByTestId("username").textContent).toBe("guest");
     expect(localStorage.getItem("user")).toBeNull();
-    expect(document.cookie).not.toContain("username=mor_2314");
+    expect(document.cookie).not.toContain("username=admin%40mail.com");
   });
 });
