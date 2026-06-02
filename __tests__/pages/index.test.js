@@ -1,17 +1,6 @@
-import { render, screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import Home, { getStaticProps } from '../../pages/index'
-import { CartProvider } from '../../context/cartcontext'
-import { AuthProvider } from '../../context/authcontext'
-
-function renderHome(products) {
-  return render(
-    <AuthProvider>
-      <CartProvider>
-        <Home products={products} />
-      </CartProvider>
-    </AuthProvider>
-  )
-}
+import { renderWithProviders } from '../../test-utils/renderWithProviders'
 
 const mockProducts = [
   { id: 1, title: 'Product 1', price: 100, image: 'img1.jpg' },
@@ -19,17 +8,41 @@ const mockProducts = [
 ]
 
 describe('Home Page', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
   it('renders with mock data', () => {
-    renderHome(mockProducts)
+    renderWithProviders(<Home products={mockProducts} />)
 
     expect(screen.getByText('Product 1')).toBeInTheDocument()
     expect(screen.getByText('Product 2')).toBeInTheDocument()
   })
 
   it('renders empty state', () => {
-    renderHome([])
+    renderWithProviders(<Home products={[]} />)
 
     expect(screen.queryByText('Product 1')).not.toBeInTheDocument()
+  })
+
+  it('renders layout with auth and cart providers', () => {
+    renderWithProviders(<Home products={mockProducts} />)
+
+    expect(screen.getByText('RevoShop')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '🛒' })).toHaveAttribute('href', '/cart')
+  })
+
+  it('shows cart badge when cart has items in localStorage', async () => {
+    localStorage.setItem(
+      'cart',
+      JSON.stringify([{ id: 1, price: 100, quantity: 2 }])
+    )
+
+    renderWithProviders(<Home products={mockProducts} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('2')).toBeInTheDocument()
+    })
   })
 })
 
