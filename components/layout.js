@@ -5,7 +5,7 @@ import { useAuth } from "../context/authcontext";
 
 export default function Layout({ children }) {
   const { cartCount } = useCart();
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
 
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
@@ -63,6 +63,12 @@ export default function Layout({ children }) {
               <Link href="/checkout" className="dropdown-item">
                 Checkout
               </Link>
+
+              {isAdmin && (
+                <Link href="/admin" className="dropdown-item">
+                  Admin
+                </Link>
+              )}
 
               <div className="dropdown-divider"></div>
 

@@ -8,6 +8,15 @@ jest.mock('next/server', () => ({
   },
 }))
 
+function mockCookies(values = {}) {
+  return {
+    get: (name) => {
+      if (values[name] === undefined) return null
+      return { value: values[name] }
+    },
+  }
+}
+
 describe('Middleware', () => {
   beforeEach(() => {
     NextResponse.redirect.mockClear()
@@ -18,7 +27,7 @@ describe('Middleware', () => {
     const req = {
       url: 'http://localhost:3000/checkout',
       nextUrl: { pathname: '/checkout' },
-      cookies: { get: () => null },
+      cookies: mockCookies(),
     }
 
     const res = middleware(req)
@@ -29,11 +38,45 @@ describe('Middleware', () => {
     )
   })
 
-  it('allows access if token exists', () => {
+  it('allows checkout access when token exists', () => {
+    const req = {
+      url: 'http://localhost:3000/checkout',
+      nextUrl: { pathname: '/checkout' },
+      cookies: mockCookies({ token: 'authenticated' }),
+    }
+
+    const res = middleware(req)
+
+    expect(res.status).toBe(200)
+    expect(NextResponse.next).toHaveBeenCalled()
+  })
+
+  it('redirects non-admin users away from admin routes', () => {
     const req = {
       url: 'http://localhost:3000/admin',
       nextUrl: { pathname: '/admin' },
-      cookies: { get: () => ({ value: 'token' }) },
+      cookies: mockCookies({
+        token: 'authenticated',
+        username: 'johnd',
+      }),
+    }
+
+    const res = middleware(req)
+
+    expect(res.status).toBe(307)
+    expect(NextResponse.redirect).toHaveBeenCalledWith(
+      new URL('/', req.url)
+    )
+  })
+
+  it('allows admin users on admin routes', () => {
+    const req = {
+      url: 'http://localhost:3000/admin',
+      nextUrl: { pathname: '/admin' },
+      cookies: mockCookies({
+        token: 'authenticated',
+        username: 'mor_2314',
+      }),
     }
 
     const res = middleware(req)

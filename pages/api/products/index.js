@@ -3,6 +3,7 @@ import {
   getProducts,
   setProducts,
 } from "../../../lib/products-data";
+import { requireAdmin } from "../../../lib/require-admin";
 import { validateProductInput } from "../../../lib/validate-product";
 
 async function revalidateHome(res) {
@@ -21,6 +22,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
+    if (!requireAdmin(req, res)) return;
+
     const { title, price } = req.body;
     const validationError = validateProductInput({ title, price });
 

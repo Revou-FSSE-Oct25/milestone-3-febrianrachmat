@@ -4,6 +4,7 @@ import {
   getProducts,
   setProducts,
 } from "../../../lib/products-data";
+import { requireAdmin } from "../../../lib/require-admin";
 import { validateProductInput } from "../../../lib/validate-product";
 
 async function revalidateHome(res) {
@@ -31,6 +32,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "PUT") {
+    if (!requireAdmin(req, res)) return;
+
     const product = getProductById(productId);
 
     if (!product) {
@@ -58,6 +61,8 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "DELETE") {
+    if (!requireAdmin(req, res)) return;
+
     const product = getProductById(productId);
 
     if (!product) {

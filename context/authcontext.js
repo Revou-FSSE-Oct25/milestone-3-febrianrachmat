@@ -1,6 +1,15 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useMemo } from "react";
+import { isAdminUsername } from "../lib/admin-users";
 
 export const AuthContext = createContext();
+
+function setAuthCookie(name, value) {
+  document.cookie = `${name}=${encodeURIComponent(value)}; path=/`;
+}
+
+function clearAuthCookie(name) {
+  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -13,6 +22,11 @@ export function AuthProvider({ children }) {
       }
     }
   }, []);
+
+  const isAdmin = useMemo(
+    () => (user ? isAdminUsername(user.username) : false),
+    [user]
+  );
 
   const login = async (username, password) => {
     try {
@@ -28,7 +42,8 @@ export function AuthProvider({ children }) {
       setUser(foundUser);
       localStorage.setItem("user", JSON.stringify(foundUser));
 
-      document.cookie = "token=authenticated; path=/";
+      setAuthCookie("token", "authenticated");
+      setAuthCookie("username", foundUser.username);
 
       return true;
     } catch (err) {
@@ -40,11 +55,12 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    clearAuthCookie("token");
+    clearAuthCookie("username");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );
