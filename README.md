@@ -131,6 +131,21 @@ Protected routes:
 
 ---
 
+# Admin (Bonus)
+
+Fitur admin adalah nilai tambah di luar requirement dasar checkout, jadi saat demo live tampilkan jika waktu masih ada.
+
+Langkah demo cepat:
+
+1. Login sebagai admin.
+2. Buka `/admin` lalu **create** produk baru.
+3. Masuk ke halaman edit lalu **edit** data produk.
+4. Hapus produk dengan aksi **delete**.
+
+Catatan: katalog produk admin memakai penyimpanan in-memory di server dev; perubahan bisa reset saat server restart.
+
+---
+
 # Installation & Setup
 
 Clone repository:
