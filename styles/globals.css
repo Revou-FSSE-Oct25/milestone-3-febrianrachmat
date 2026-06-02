@@ -1,19 +1,14 @@
-/* ===== RESET & BASE ===== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@import "tailwindcss";
 
+/* ===== BASE ===== */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
   background-color: #ffffff;
   color: #111;
   line-height: 1.6;
 }
 
-/* ===== LINKS ===== */
 a {
   color: #111;
   text-decoration: none;
@@ -23,82 +18,10 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ===== LAYOUT ===== */
 main {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
-}
-
-/* ===== NAVBAR ===== */
-.navbar {
-  position: sticky;
-  top: 0;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  height: 70px;
-  z-index: 1000;
-}
-
-.nav-container {
-  max-width: 1200px;
-  height: 100%;
-  margin: 0 auto;
-  padding: 0 40px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* LEFT SIDE */
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 50px;
-}
-
-.logo {
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: 1px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 28px;
-}
-
-.nav-links a {
-  font-weight: 500;
-  font-size: 15px;
-  transition: 0.2s;
-}
-
-.nav-links a:hover {
-  opacity: 0.6;
-}
-
-.nav-login {
-  font-weight: 600;
-  font-size: 14px;
-  padding: 8px 16px;
-  border: 1px solid #111;
-  border-radius: 6px;
-  transition: 0.2s;
-}
-
-.nav-login:hover {
-  background: #111;
-  color: #fff;
-  text-decoration: none;
-}
-
-/* RIGHT SIDE */
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
 }
 
 /* ===== HEADINGS ===== */
@@ -113,57 +36,12 @@ h3 {
   font-weight: 600;
 }
 
-/* ===== PRODUCT GRID ===== */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 32px;
-}
-
-/* ===== PRODUCT CARD ===== */
-.card {
-  border: 1px solid #eaeaea;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background: #fff;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-}
-
-.card img {
-  width: 100%;
-  height: 260px;
-  object-fit: contain;
-  margin-bottom: 16px;
-}
-
-.card h3 {
-  font-size: 16px;
-  margin-bottom: 8px;
-}
-
-.card p {
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
 /* ===== PRODUCT DETAIL ===== */
 .product-detail {
   display: grid;
   grid-template-columns: 420px 1fr;
   gap: 64px;
   align-items: start;
-}
-
-.product-image img {
-  width: 100%;
-  max-height: 420px;
-  object-fit: contain;
 }
 
 .product-info h1 {
@@ -183,17 +61,10 @@ h3 {
   margin-bottom: 24px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .product-detail {
     grid-template-columns: 1fr;
   }
-}
-
-/* ===== BUTTON / LINK ===== */
-.card a {
-  margin-top: auto;
-  font-size: 14px;
 }
 
 /* ===== ADD TO CART BUTTON ===== */
@@ -212,7 +83,6 @@ h3 {
   animation: cart-bounce 0.35s ease;
 }
 
-/* ===== BUTTON ANIMATION ===== */
 @keyframes cart-bounce {
   0% {
     transform: scale(1);
@@ -267,12 +137,6 @@ h3 {
   align-items: center;
   gap: 20px;
   flex: 1;
-}
-
-.cart-item img {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
 }
 
 .cart-item h3 {
@@ -395,84 +259,6 @@ h3 {
   opacity: 0.9;
 }
 
-/* ===== CART BADGE ===== */
-.cart-link {
-  position: relative;
-  padding-right: 8px;
-}
-
-.cart-icon {
-  position: relative;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -10px;
-  background: black;
-  color: white;
-  font-size: 11px;
-  padding: 3px 6px;
-  border-radius: 50%;
-}
-
-/* ===== BADGE ANIMATION ===== */
-@keyframes badge-pop {
-  0% {
-    transform: scale(0.6);
-    opacity: 0;
-  }
-  70% {
-    transform: scale(1.15);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* ===== SKELETON ===== */
-.skeleton {
-  border: 1px solid #eaeaea;
-  padding: 20px;
-}
-
-.skeleton-img {
-  width: 100%;
-  height: 260px;
-  background: #eee;
-  margin-bottom: 16px;
-  animation: skeleton-pulse 1.2s infinite ease-in-out;
-}
-
-.skeleton-text {
-  height: 16px;
-  background: #eee;
-  margin-bottom: 10px;
-  animation: skeleton-pulse 1.2s infinite ease-in-out;
-}
-
-.skeleton-text.small {
-  width: 60%;
-}
-
-/* ===== SKELETON ANIMATION ===== */
-@keyframes skeleton-pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 .auth-container {
   max-width: 400px;
   margin: 80px auto;
@@ -573,81 +359,15 @@ h3 {
   background: darkred;
 }
 
-/* ===== PROFILE ===== */
-
-.profile-wrapper {
-  position: relative;
-}
-
-.avatar {
-  width: 38px;
-  height: 38px;
-  background: black;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.avatar:hover {
-  transform: scale(1.05);
-}
-
-/* ===== DROPDOWN ===== */
-
-.dropdown {
-  position: absolute;
-  right: 0;
-  top: 50px;
-  width: 200px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  padding: 12px;
-  animation: fadeIn 0.2s ease;
-}
-
-.dropdown-header {
-  font-weight: 600;
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 8px;
-}
-
-.dropdown-item {
-  display: block;
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.dropdown-item:hover {
-  background: #f5f5f5;
-}
-
-.logout {
-  color: red;
-  background: none;
-  border: none;
-  text-align: left;
-  width: 100%;
-}
-
-.dropdown-divider {
-  height: 1px;
-  background: #eee;
-  margin: 8px 0;
-}
-
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== TOAST ===== */

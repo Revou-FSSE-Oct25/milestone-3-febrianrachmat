@@ -3,9 +3,19 @@ import Home from '../../pages/index'
 import { renderWithProviders } from '../../test-utils/renderWithProviders'
 
 const mockProducts = [
-  { id: 1, title: 'Product 1', price: 100, image: 'img1.jpg' },
-  { id: 2, title: 'Product 2', price: 200, image: 'img2.jpg' },
-]
+  {
+    id: 1,
+    title: "Product 1",
+    price: 100,
+    image: "https://fakestoreapi.com/img/product-1.jpg",
+  },
+  {
+    id: 2,
+    title: "Product 2",
+    price: 200,
+    image: "https://fakestoreapi.com/img/product-2.jpg",
+  },
+];
 
 describe('Home Page', () => {
   beforeEach(() => {
@@ -38,7 +48,7 @@ describe('Home Page', () => {
     renderWithProviders(<Home products={mockProducts} />)
 
     expect(screen.getByText('RevoShop')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '🛒' })).toHaveAttribute('href', '/cart')
+    expect(screen.getByRole("link", { name: "Cart" })).toHaveAttribute("href", "/cart");
     expect(screen.getByRole('link', { name: 'Login' })).toHaveAttribute('href', '/login')
   })
 

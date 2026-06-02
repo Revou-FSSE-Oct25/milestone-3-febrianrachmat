@@ -1,10 +1,10 @@
 import Layout from "../../components/layout";
-import { useContext } from "react";
-import { CartContext } from "../../context/cartcontext";
+import Image from "next/image";
+import { useCart } from "../../context/cartcontext";
 import { useToast } from "../../context/toastcontext";
 
 export default function ProductDetail({ product }) {
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
   const { showToast } = useToast();
 
   const handleAddToCart = () => {
@@ -16,7 +16,16 @@ export default function ProductDetail({ product }) {
     <Layout>
       <div className="product-detail">
         <div className="product-image">
-          <img src={product.image} alt={product.title} />
+          <div className="relative h-[420px] w-full">
+            <Image
+              src={product.image}
+              alt={product.title}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 420px"
+              priority
+            />
+          </div>
         </div>
 
         <div className="product-info">
@@ -24,10 +33,7 @@ export default function ProductDetail({ product }) {
           <p className="product-desc">{product.description}</p>
           <div className="product-price">${product.price}</div>
 
-          <button
-            className="add-to-cart-btn"
-            onClick={handleAddToCart}
-          >
+          <button className="add-to-cart-btn" onClick={handleAddToCart}>
             Add to Cart
           </button>
         </div>
@@ -37,9 +43,7 @@ export default function ProductDetail({ product }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const { bootstrapProducts, getProductById } = await import(
-    "../../lib/products-data"
-  );
+  const { bootstrapProducts, getProductById } = await import("../../lib/products-data");
 
   await bootstrapProducts();
 

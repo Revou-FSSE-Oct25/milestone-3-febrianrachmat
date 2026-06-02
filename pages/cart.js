@@ -1,16 +1,11 @@
 import Layout from "../components/layout";
+import Image from "next/image";
 import { useCart } from "../context/cartcontext";
 import { useRouter } from "next/router";
 
 export default function CartPage() {
-  const {
-    cart,
-    increaseQty,
-    decreaseQty,
-    removeFromCart,
-    clearCart,
-    cartTotal,
-  } = useCart();
+  const { cart, increaseQty, decreaseQty, removeFromCart, clearCart, cartTotal } =
+    useCart();
 
   const router = useRouter();
 
@@ -34,7 +29,15 @@ export default function CartPage() {
           {cart.map((item) => (
             <div key={item.id} className="cart-item">
               <div className="cart-item-content">
-                <img src={item.image} alt={item.title} />
+                <div className="relative h-[100px] w-[100px] shrink-0">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-contain"
+                    sizes="100px"
+                  />
+                </div>
 
                 <div className="cart-info">
                   <h3>{item.title}</h3>

@@ -1,13 +1,13 @@
-import { useContext } from "react";
-import { CartContext } from "../context/cartcontext";
+import { useCart } from "../context/cartcontext";
 import { useToast } from "../context/toastcontext";
 import Layout from "../components/layout";
 import { useRouter } from "next/router";
 
 export default function Checkout() {
-  const { cart, cartTotal, clearCart } = useContext(CartContext);
+  const { cart, cartTotal, clearCart } = useCart();
   const { showToast } = useToast();
   const router = useRouter();
+
   if (cart.length === 0) {
     return (
       <Layout>
@@ -39,9 +39,7 @@ export default function Checkout() {
               <p>
                 ${item.price} x {item.quantity}
               </p>
-              <p>
-                Subtotal: ${(item.price * item.quantity).toFixed(2)}
-              </p>
+              <p>Subtotal: ${(item.price * item.quantity).toFixed(2)}</p>
             </div>
           ))}
         </div>
@@ -51,11 +49,7 @@ export default function Checkout() {
         <h2 className="checkout-total">Total: ${cartTotal.toFixed(2)}</h2>
 
         <div className="checkout-actions">
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={handlePlaceOrder}
-          >
+          <button type="button" className="btn-primary" onClick={handlePlaceOrder}>
             Place Order
           </button>
         </div>
