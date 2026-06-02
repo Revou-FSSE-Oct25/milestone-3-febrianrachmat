@@ -16,3 +16,9 @@ export default function Promo() {
     </Layout>
   );
 }
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}

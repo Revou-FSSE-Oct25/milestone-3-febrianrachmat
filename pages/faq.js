@@ -24,3 +24,9 @@ export default function FAQ() {
     </Layout>
   );
 }
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}

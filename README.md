@@ -55,6 +55,7 @@ Ringkasan pola rendering di aplikasi ini:
 | Halaman | Pola | Implementasi |
 |---------|------|----------------|
 | `/` (Home) | **ISR** (SSG + revalidate) | `getStaticProps` + `revalidate: 60` |
+| `/promo`, `/faq` | **SSG** | `getStaticProps` — konten statis di-generate saat build |
 | `/products/[id]` | **SSR** | `getServerSideProps` — data produk di-fetch di server pada setiap request |
 | `/cart`, `/admin`, `/login`, dll. | **CSR** | React Context + `fetch` di client |
 
