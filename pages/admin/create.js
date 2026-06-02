@@ -21,7 +21,6 @@ export default function CreateProduct() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: Date.now(),
         title,
         price: Number(price),
       }),
