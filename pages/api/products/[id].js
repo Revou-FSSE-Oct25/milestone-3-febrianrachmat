@@ -1,13 +1,27 @@
-import { getProducts, setProducts } from "../../../lib/products-data";
+import {
+  bootstrapProducts,
+  getProductById,
+  getProducts,
+  setProducts,
+} from "../../../lib/products-data";
 import { validateProductInput } from "../../../lib/validate-product";
 
-export default function handler(req, res) {
+async function revalidateHome(res) {
+  try {
+    await res.revalidate("/");
+  } catch {
+    // ISR revalidation is best-effort in local dev
+  }
+}
+
+export default async function handler(req, res) {
+  await bootstrapProducts();
+
   const { id } = req.query;
-  const products = getProducts();
   const productId = Number(id);
 
   if (req.method === "GET") {
-    const product = products.find((p) => p.id === productId);
+    const product = getProductById(productId);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -17,7 +31,7 @@ export default function handler(req, res) {
   }
 
   if (req.method === "PUT") {
-    const product = products.find((p) => p.id === productId);
+    const product = getProductById(productId);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -30,6 +44,7 @@ export default function handler(req, res) {
       return res.status(400).json({ message: validationError });
     }
 
+    const products = getProducts();
     const updatedProducts = products.map((p) =>
       p.id === productId
         ? { ...p, title: title.trim(), price: Number(price) }
@@ -37,20 +52,22 @@ export default function handler(req, res) {
     );
 
     setProducts(updatedProducts);
+    await revalidateHome(res);
 
     return res.status(200).json({ message: "Product updated" });
   }
 
   if (req.method === "DELETE") {
-    const product = products.find((p) => p.id === productId);
+    const product = getProductById(productId);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const filteredProducts = products.filter((p) => p.id !== productId);
+    const filteredProducts = getProducts().filter((p) => p.id !== productId);
 
     setProducts(filteredProducts);
+    await revalidateHome(res);
 
     return res.status(200).json({ message: "Product deleted" });
   }

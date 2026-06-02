@@ -30,15 +30,17 @@ export default function ProductDetail({ product }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const res = await fetch(
-    `https://fakestoreapi.com/products/${params.id}`
+  const { bootstrapProducts, getProductById } = await import(
+    "../../lib/products-data"
   );
 
-  if (!res.ok) {
+  await bootstrapProducts();
+
+  const product = getProductById(params.id);
+
+  if (!product) {
     return { notFound: true };
   }
-
-  const product = await res.json();
 
   return {
     props: { product },

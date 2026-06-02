@@ -1,5 +1,5 @@
 import { screen, waitFor } from '@testing-library/react'
-import Home, { getStaticProps } from '../../pages/index'
+import Home from '../../pages/index'
 import { renderWithProviders } from '../../test-utils/renderWithProviders'
 
 const mockProducts = [
@@ -48,18 +48,20 @@ describe('Home Page', () => {
 
 describe('getStaticProps', () => {
   beforeEach(() => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(mockProducts),
-      })
-    )
+    jest.resetModules()
+    jest.doMock('../../lib/products-data', () => ({
+      bootstrapProducts: jest.fn().mockResolvedValue(undefined),
+      getProducts: jest.fn(() => mockProducts),
+    }))
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    jest.dontMock('../../lib/products-data')
+    jest.resetModules()
   })
 
-  it('returns products from API', async () => {
+  it('returns products from shared product store', async () => {
+    const { getStaticProps } = await import('../../pages/index')
     const result = await getStaticProps()
 
     expect(result).toEqual({

@@ -1,7 +1,21 @@
-import { getProducts, setProducts } from "../../../lib/products-data";
+import {
+  bootstrapProducts,
+  getProducts,
+  setProducts,
+} from "../../../lib/products-data";
 import { validateProductInput } from "../../../lib/validate-product";
 
-export default function handler(req, res) {
+async function revalidateHome(res) {
+  try {
+    await res.revalidate("/");
+  } catch {
+    // ISR revalidation is best-effort in local dev
+  }
+}
+
+export default async function handler(req, res) {
+  await bootstrapProducts();
+
   if (req.method === "GET") {
     return res.status(200).json(getProducts());
   }
@@ -23,6 +37,7 @@ export default function handler(req, res) {
 
     const products = getProducts();
     setProducts([...products, newProduct]);
+    await revalidateHome(res);
 
     return res.status(201).json(newProduct);
   }

@@ -24,11 +24,12 @@ export default function Home({ products }) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch("https://fakestoreapi.com/products");
-  const products = await res.json();
+  const { bootstrapProducts, getProducts } = await import("../lib/products-data");
+
+  await bootstrapProducts();
 
   return {
-    props: { products },
+    props: { products: getProducts() },
     revalidate: 60,
   };
 }
