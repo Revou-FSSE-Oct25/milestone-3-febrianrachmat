@@ -17,95 +17,73 @@ export default function CartPage() {
   if (cart.length === 0) {
     return (
       <Layout>
-        <h2>Your cart is empty</h2>
+        <div className="cart-page">
+          <h1>Shopping Cart</h1>
+          <p className="empty-cart">Your cart is empty</p>
+        </div>
       </Layout>
     );
   }
 
   return (
     <Layout>
-      <h1>Shopping Cart</h1>
+      <div className="cart-page">
+        <h1>Shopping Cart</h1>
 
-      {cart.map((item) => (
-        <div
-          key={item.id}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "20px",
-            padding: "20px",
-            border: "1px solid #eee",
-            borderRadius: "10px",
-          }}
-        >
-          <div style={{ display: "flex", gap: "20px" }}>
-            <img src={item.image} width="80" />
+        <div className="cart-list">
+          {cart.map((item) => (
+            <div key={item.id} className="cart-item">
+              <div className="cart-item-content">
+                <img src={item.image} alt={item.title} />
 
-            <div>
-              <h3>{item.title}</h3>
-              <p>${item.price}</p>
+                <div className="cart-info">
+                  <h3>{item.title}</h3>
+                  <p>${item.price}</p>
 
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button onClick={() => decreaseQty(item.id)}>-</button>
-                <span>{item.quantity}</span>
-                <button onClick={() => increaseQty(item.id)}>+</button>
+                  <div className="qty-control">
+                    <button type="button" onClick={() => decreaseQty(item.id)}>
+                      -
+                    </button>
+                    <span>{item.quantity}</span>
+                    <button type="button" onClick={() => increaseQty(item.id)}>
+                      +
+                    </button>
+                  </div>
+
+                  <p className="cart-subtotal">
+                    Subtotal: ${(item.price * item.quantity).toFixed(2)}
+                  </p>
+                </div>
               </div>
 
-              {/* Subtotal */}
-              <p style={{ marginTop: "10px", fontWeight: "bold" }}>
-                Subtotal: $
-                {(item.price * item.quantity).toFixed(2)}
-              </p>
+              <button
+                type="button"
+                className="remove-btn"
+                onClick={() => removeFromCart(item.id)}
+              >
+                Remove
+              </button>
             </div>
-          </div>
-
-          <button
-            style={{
-              background: "crimson",
-              color: "white",
-              border: "none",
-              padding: "10px 20px",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-            onClick={() => removeFromCart(item.id)}
-          >
-            Remove
-          </button>
+          ))}
         </div>
-      ))}
 
-      <div style={{ textAlign: "right", marginTop: "40px" }}>
-        <h2>Total: ${cartTotal.toFixed(2)}</h2>
+        <div className="cart-footer">
+          <h2 className="cart-total">Total: ${cartTotal.toFixed(2)}</h2>
 
-        <button
-          style={{
-            marginRight: "10px",
-            background: "gray",
-            color: "white",
-            padding: "10px 20px",
-            border: "none",
-            borderRadius: "6px",
-          }}
-          onClick={clearCart}
-        >
-          Clear Cart
-        </button>
+          <div className="cart-actions">
+            <button type="button" className="btn-secondary" onClick={clearCart}>
+              Clear Cart
+            </button>
 
-        <button
-          style={{
-            background: "black",
-            color: "white",
-            padding: "15px 30px",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-          }}
-          onClick={() => router.push("/checkout")}
-        >
-          Checkout
-        </button>
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={() => router.push("/checkout")}
+            >
+              Checkout
+            </button>
+          </div>
+        </div>
       </div>
     </Layout>
   );
