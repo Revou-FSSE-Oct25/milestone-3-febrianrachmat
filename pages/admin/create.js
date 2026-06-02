@@ -49,15 +49,16 @@ export default function CreateProduct() {
 
   return (
     <Layout>
-      <div className="auth-container">
-        <h1>Create Product</h1>
+      <div className="mx-auto my-20 max-w-md">
+        <h1 className="mb-8 text-[32px] font-bold">Create Product</h1>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
             type="text"
             placeholder="Product Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="rounded-md border border-gray-300 px-3 py-3"
             required
           />
 
@@ -68,12 +69,17 @@ export default function CreateProduct() {
             onChange={(e) => setPrice(e.target.value)}
             min="0"
             step="0.01"
+            className="rounded-md border border-gray-300 px-3 py-3"
             required
           />
 
-          {error && <p className="error">{error}</p>}
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
-          <button type="submit" disabled={loading}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="cursor-pointer rounded-md bg-black px-3 py-3 text-white disabled:opacity-50"
+          >
             {loading ? "Creating..." : "Create"}
           </button>
         </form>

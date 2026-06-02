@@ -3,6 +3,12 @@ import Image from "next/image";
 import { useCart } from "../context/cartcontext";
 import { useRouter } from "next/router";
 
+const primaryBtnClass =
+  "cursor-pointer rounded-lg bg-black px-[30px] py-[15px] font-semibold text-white transition hover:opacity-90";
+
+const secondaryBtnClass =
+  "cursor-pointer rounded-lg bg-gray-500 px-5 py-2.5 font-semibold text-white transition hover:opacity-90";
+
 export default function CartPage() {
   const { cart, increaseQty, decreaseQty, removeFromCart, clearCart, cartTotal } =
     useCart();
@@ -12,9 +18,9 @@ export default function CartPage() {
   if (cart.length === 0) {
     return (
       <Layout>
-        <div className="cart-page">
-          <h1>Shopping Cart</h1>
-          <p className="empty-cart">Your cart is empty</p>
+        <div className="py-10">
+          <h1 className="mb-8 text-4xl font-bold">Shopping Cart</h1>
+          <p className="text-lg text-gray-500">Your cart is empty</p>
         </div>
       </Layout>
     );
@@ -22,13 +28,16 @@ export default function CartPage() {
 
   return (
     <Layout>
-      <div className="cart-page">
-        <h1>Shopping Cart</h1>
+      <div className="py-10">
+        <h1 className="mb-8 text-4xl font-bold">Shopping Cart</h1>
 
-        <div className="cart-list">
+        <div className="flex flex-col gap-5">
           {cart.map((item) => (
-            <div key={item.id} className="cart-item">
-              <div className="cart-item-content">
+            <div
+              key={item.id}
+              className="flex items-center justify-between gap-5 rounded-xl border border-gray-200 p-5"
+            >
+              <div className="flex flex-1 items-center gap-5">
                 <div className="relative h-[100px] w-[100px] shrink-0">
                   <Image
                     src={item.image}
@@ -39,21 +48,29 @@ export default function CartPage() {
                   />
                 </div>
 
-                <div className="cart-info">
-                  <h3>{item.title}</h3>
-                  <p>${item.price}</p>
+                <div className="flex flex-1 flex-col gap-1">
+                  <h3 className="text-base font-semibold">{item.title}</h3>
+                  <p className="font-semibold">${item.price}</p>
 
-                  <div className="qty-control">
-                    <button type="button" onClick={() => decreaseQty(item.id)}>
+                  <div className="mt-2.5 flex items-center gap-2.5">
+                    <button
+                      type="button"
+                      className="h-[30px] w-[30px] cursor-pointer rounded-md bg-black text-white"
+                      onClick={() => decreaseQty(item.id)}
+                    >
                       -
                     </button>
-                    <span>{item.quantity}</span>
-                    <button type="button" onClick={() => increaseQty(item.id)}>
+                    <span className="text-base font-bold">{item.quantity}</span>
+                    <button
+                      type="button"
+                      className="h-[30px] w-[30px] cursor-pointer rounded-md bg-black text-white"
+                      onClick={() => increaseQty(item.id)}
+                    >
                       +
                     </button>
                   </div>
 
-                  <p className="cart-subtotal">
+                  <p className="mt-2.5 font-bold">
                     Subtotal: ${(item.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
@@ -61,7 +78,7 @@ export default function CartPage() {
 
               <button
                 type="button"
-                className="remove-btn"
+                className="shrink-0 cursor-pointer rounded-md bg-rose-600 px-4 py-2.5 text-white transition hover:bg-rose-700"
                 onClick={() => removeFromCart(item.id)}
               >
                 Remove
@@ -70,17 +87,17 @@ export default function CartPage() {
           ))}
         </div>
 
-        <div className="cart-footer">
-          <h2 className="cart-total">Total: ${cartTotal.toFixed(2)}</h2>
+        <div className="mt-10 text-right">
+          <h2 className="mb-4 text-[22px] font-bold">Total: ${cartTotal.toFixed(2)}</h2>
 
-          <div className="cart-actions">
-            <button type="button" className="btn-secondary" onClick={clearCart}>
+          <div className="flex flex-wrap justify-end gap-2.5">
+            <button type="button" className={secondaryBtnClass} onClick={clearCart}>
               Clear Cart
             </button>
 
             <button
               type="button"
-              className="btn-primary"
+              className={primaryBtnClass}
               onClick={() => router.push("/checkout")}
             >
               Checkout

@@ -25,9 +25,7 @@ export default function LoginPage() {
       const redirect =
         typeof router.query.redirect === "string" ? router.query.redirect : "/";
       const safeRedirect =
-        redirect.startsWith("/") && !redirect.startsWith("//")
-          ? redirect
-          : "/";
+        redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "/";
 
       router.push(safeRedirect);
     } else {
@@ -37,15 +35,16 @@ export default function LoginPage() {
 
   return (
     <Layout>
-      <div className="auth-container">
-        <h1>Login</h1>
+      <div className="mx-auto my-20 max-w-md">
+        <h1 className="mb-8 text-[32px] font-bold">Login</h1>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            className="rounded-md border border-gray-300 px-3 py-3"
             required
           />
 
@@ -54,12 +53,17 @@ export default function LoginPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="rounded-md border border-gray-300 px-3 py-3"
             required
           />
 
-          {error && <p className="error">{error}</p>}
+          {error && <p className="text-sm text-red-600">{error}</p>}
 
-          <button type="submit" disabled={loading}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="cursor-pointer rounded-md bg-black px-3 py-3 text-white disabled:opacity-50"
+          >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>

@@ -70,7 +70,7 @@ export default function AdminPage() {
         + Add Product
       </button>
 
-      {deleteError && <p className="error mt-4">{deleteError}</p>}
+      {deleteError && <p className="mt-4 text-sm text-red-600">{deleteError}</p>}
 
       <div className="mt-5 overflow-x-auto">
         <table className="w-full border-collapse border border-gray-200 text-left">

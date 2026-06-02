@@ -79,29 +79,30 @@ export default function EditProduct() {
 
   return (
     <Layout>
-      <div className="auth-container">
-        <h1>Edit Product</h1>
+      <div className="mx-auto my-20 max-w-md">
+        <h1 className="mb-8 text-[32px] font-bold">Edit Product</h1>
 
         {loadingProduct ? (
-          <p className="empty-cart">Loading product...</p>
+          <p className="text-lg text-gray-500">Loading product...</p>
         ) : loadError ? (
           <>
-            <p className="error">{loadError}</p>
+            <p className="mb-4 text-sm text-red-600">{loadError}</p>
             <button
               type="button"
-              className="btn-secondary"
+              className="cursor-pointer rounded-lg bg-gray-500 px-5 py-2.5 font-semibold text-white transition hover:opacity-90"
               onClick={() => router.push("/admin")}
             >
               Back to Admin
             </button>
           </>
         ) : (
-          <form onSubmit={handleSubmit} className="auth-form">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <input
               type="text"
               placeholder="Product Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              className="rounded-md border border-gray-300 px-3 py-3"
               required
             />
 
@@ -112,12 +113,17 @@ export default function EditProduct() {
               onChange={(e) => setPrice(e.target.value)}
               min="0"
               step="0.01"
+              className="rounded-md border border-gray-300 px-3 py-3"
               required
             />
 
-            {error && <p className="error">{error}</p>}
+            {error && <p className="text-sm text-red-600">{error}</p>}
 
-            <button type="submit" disabled={loading}>
+            <button
+              type="submit"
+              disabled={loading}
+              className="cursor-pointer rounded-md bg-black px-3 py-3 text-white disabled:opacity-50"
+            >
               {loading ? "Updating..." : "Update"}
             </button>
           </form>

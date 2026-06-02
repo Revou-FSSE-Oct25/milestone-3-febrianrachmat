@@ -14,8 +14,8 @@ export default function ProductDetail({ product }) {
 
   return (
     <Layout>
-      <div className="product-detail">
-        <div className="product-image">
+      <div className="grid items-start gap-16 md:grid-cols-[420px_1fr]">
+        <div>
           <div className="relative h-[420px] w-full">
             <Image
               src={product.image}
@@ -28,12 +28,16 @@ export default function ProductDetail({ product }) {
           </div>
         </div>
 
-        <div className="product-info">
-          <h1>{product.title}</h1>
-          <p className="product-desc">{product.description}</p>
-          <div className="product-price">${product.price}</div>
+        <div>
+          <h1 className="mb-4 text-[28px] font-bold">{product.title}</h1>
+          <p className="mb-6 leading-relaxed text-gray-600">{product.description}</p>
+          <div className="mb-6 text-2xl font-bold">${product.price}</div>
 
-          <button className="add-to-cart-btn" onClick={handleAddToCart}>
+          <button
+            type="button"
+            className="cursor-pointer bg-black px-7 py-3.5 text-sm font-semibold text-white transition active:scale-95"
+            onClick={handleAddToCart}
+          >
             Add to Cart
           </button>
         </div>

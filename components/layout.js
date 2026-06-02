@@ -133,7 +133,7 @@ export default function Layout({ children }) {
           </div>
         </div>
       </nav>
-      <main>{children}</main>
+      <main className="mx-auto max-w-[1200px] px-5 py-10">{children}</main>
     </>
   );
 }
