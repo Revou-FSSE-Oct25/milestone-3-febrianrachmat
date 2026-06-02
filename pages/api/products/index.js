@@ -1,4 +1,5 @@
 import { getProducts, setProducts } from "../../../lib/products-data";
+import { validateProductInput } from "../../../lib/validate-product";
 
 export default function handler(req, res) {
   if (req.method === "GET") {
@@ -6,9 +7,18 @@ export default function handler(req, res) {
   }
 
   if (req.method === "POST") {
+    const { title, price } = req.body;
+    const validationError = validateProductInput({ title, price });
+
+    if (validationError) {
+      return res.status(400).json({ message: validationError });
+    }
+
     const newProduct = {
-      id: Date.now(),
       ...req.body,
+      id: Date.now(),
+      title: title.trim(),
+      price: Number(price),
     };
 
     const products = getProducts();

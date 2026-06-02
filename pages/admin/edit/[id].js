@@ -23,6 +23,11 @@ export default function EditProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!title || !price) {
+      alert("All fields required");
+      return;
+    }
+
     await fetch(`/api/products/${id}`, {
       method: "PUT",
       headers: {
@@ -44,6 +49,7 @@ export default function EditProduct() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
+          placeholder="Product Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -52,6 +58,7 @@ export default function EditProduct() {
 
         <input
           type="number"
+          placeholder="Price"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />

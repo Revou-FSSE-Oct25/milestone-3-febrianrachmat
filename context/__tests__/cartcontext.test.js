@@ -23,6 +23,9 @@ function TestComponent() {
 }
 
 describe('CartContext', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
 
   it('adds item to cart', async () => {
     render(
@@ -78,6 +81,20 @@ describe('CartContext', () => {
     await userEvent.click(screen.getByText('Add'))
 
     expect(screen.getByTestId('cart-total').textContent).toBe('10')
+  })
+
+  it('persists cart to localStorage', async () => {
+    render(
+      <CartProvider>
+        <TestComponent />
+      </CartProvider>
+    )
+
+    await userEvent.click(screen.getByText('Add'))
+
+    expect(JSON.parse(localStorage.getItem('cart'))).toEqual([
+      { id: 1, price: 10, quantity: 1 },
+    ])
   })
 
 })

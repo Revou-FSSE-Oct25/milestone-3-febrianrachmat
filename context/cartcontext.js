@@ -1,9 +1,33 @@
-import { createContext, useState, useContext, useMemo } from "react";
+import { createContext, useState, useContext, useMemo, useEffect } from "react";
 
 export const CartContext = createContext();
 
+const CART_STORAGE_KEY = "cart";
+
+function readCartFromStorage() {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setCart(readCartFromStorage());
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  }, [cart, isHydrated]);
 
   const addToCart = (product) => {
     setCart((prev) => {

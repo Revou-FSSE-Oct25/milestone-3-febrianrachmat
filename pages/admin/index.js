@@ -4,14 +4,14 @@ import useProducts from "../../hooks/useproduct";
 
 export default function AdminPage() {
   const router = useRouter();
-  const products = useProducts();
+  const { products, refetch } = useProducts();
 
   const handleDelete = async (id) => {
     await fetch(`/api/products/${id}`, {
       method: "DELETE",
     });
 
-    router.reload();
+    await refetch();
   };
 
   return (

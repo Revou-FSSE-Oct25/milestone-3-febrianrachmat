@@ -1,11 +1,13 @@
 import { getProducts, setProducts } from "../../../lib/products-data";
+import { validateProductInput } from "../../../lib/validate-product";
 
 export default function handler(req, res) {
   const { id } = req.query;
   const products = getProducts();
+  const productId = Number(id);
 
   if (req.method === "GET") {
-    const product = products.find((p) => p.id === Number(id));
+    const product = products.find((p) => p.id === productId);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -15,11 +17,22 @@ export default function handler(req, res) {
   }
 
   if (req.method === "PUT") {
+    const product = products.find((p) => p.id === productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     const { title, price } = req.body;
+    const validationError = validateProductInput({ title, price });
+
+    if (validationError) {
+      return res.status(400).json({ message: validationError });
+    }
 
     const updatedProducts = products.map((p) =>
-      p.id === Number(id)
-        ? { ...p, title, price }
+      p.id === productId
+        ? { ...p, title: title.trim(), price: Number(price) }
         : p
     );
 
@@ -29,9 +42,13 @@ export default function handler(req, res) {
   }
 
   if (req.method === "DELETE") {
-    const filteredProducts = products.filter(
-      (p) => p.id !== Number(id)
-    );
+    const product = products.find((p) => p.id === productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const filteredProducts = products.filter((p) => p.id !== productId);
 
     setProducts(filteredProducts);
 

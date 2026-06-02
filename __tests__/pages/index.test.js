@@ -3,6 +3,12 @@ import Home, { getStaticProps } from '../../pages/index'
 import { CartProvider } from '../../context/cartcontext'
 import { AuthProvider } from '../../context/authcontext'
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}))
+
 function renderHome(products) {
   return render(
     <AuthProvider>

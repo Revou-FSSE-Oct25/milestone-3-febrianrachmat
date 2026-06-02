@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function useProducts() {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    fetch("/api/products")
+  const refetch = useCallback(() => {
+    return fetch("/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
 
-  return products;
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { products, refetch };
 }
