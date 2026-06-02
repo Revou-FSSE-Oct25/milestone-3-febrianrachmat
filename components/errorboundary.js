@@ -19,16 +19,13 @@ export default class ErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <Layout>
-          <div className="py-20 text-center">
-            <h1 className="mb-4 text-3xl font-bold">Something went wrong</h1>
-            <p className="mb-6 text-gray-600">
+          <div className="luxury-surface mx-auto max-w-xl border border-black/8 px-8 py-16 text-center md:px-12">
+            <p className="page-eyebrow">Unexpected Error</p>
+            <h1 className="page-title mt-3">Something went wrong</h1>
+            <p className="mx-auto mt-4 max-w-sm text-sm text-black/65">
               An unexpected error occurred. Please refresh the page and try again.
             </p>
-            <button
-              type="button"
-              className="cursor-pointer rounded-lg bg-black px-6 py-3 font-semibold text-white"
-              onClick={() => window.location.reload()}
-            >
+            <button type="button" className="btn-luxury mt-8" onClick={() => window.location.reload()}>
               Refresh Page
             </button>
           </div>

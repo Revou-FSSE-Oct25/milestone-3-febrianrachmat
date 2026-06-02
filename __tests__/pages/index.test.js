@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Home from "../../pages/index";
 import { renderWithProviders } from "../../test-utils/renderWithProviders";
@@ -43,8 +43,9 @@ describe("Home Page", () => {
   it("renders with mock data", async () => {
     await renderHome(<Home products={mockProducts} usedFallback={false} />);
 
-    expect(screen.getByText("Product 1")).toBeInTheDocument();
-    expect(screen.getByText("Product 2")).toBeInTheDocument();
+    const catalog = within(screen.getByTestId("product-catalog"));
+    expect(catalog.getByText("Product 1")).toBeInTheDocument();
+    expect(catalog.getByText("Product 2")).toBeInTheDocument();
   });
 
   it("does not require login to browse products", async () => {
@@ -52,7 +53,9 @@ describe("Home Page", () => {
 
     await renderHome(<Home products={mockProducts} usedFallback={false} />);
 
-    expect(screen.getByText("RevoShop Products")).toBeInTheDocument();
+    expect(
+      screen.getByText("Luxury essentials for modern, curated living.")
+    ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Login" })).toBeInTheDocument();
   });
 
@@ -71,8 +74,9 @@ describe("Home Page", () => {
 
     await user.type(screen.getByPlaceholderText("Search by product name..."), "Product 2");
 
-    expect(screen.queryByText("Product 1")).not.toBeInTheDocument();
-    expect(screen.getByText("Product 2")).toBeInTheDocument();
+    const catalog = within(screen.getByTestId("product-catalog"));
+    expect(catalog.queryByText("Product 1")).not.toBeInTheDocument();
+    expect(catalog.getByText("Product 2")).toBeInTheDocument();
   });
 
   it("renders empty state", async () => {
@@ -84,9 +88,31 @@ describe("Home Page", () => {
   it("renders layout with auth and cart providers", async () => {
     await renderHome(<Home products={mockProducts} usedFallback={false} />);
 
-    expect(screen.getByText("RevoShop")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "ETERE" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Cart" })).toHaveAttribute("href", "/cart");
     expect(screen.getByRole("link", { name: "Login" })).toHaveAttribute("href", "/login");
+  });
+
+  it("shows toast when newsletter is submitted with valid email", async () => {
+    const user = userEvent.setup();
+
+    await renderHome(<Home products={mockProducts} usedFallback={false} />);
+
+    await user.type(screen.getByLabelText("Email for newsletter"), "reader@etere.com");
+    await user.click(screen.getByRole("button", { name: "Subscribe" }));
+
+    expect(screen.getByRole("status")).toHaveTextContent("Subscribed to The Editorial Letter.");
+  });
+
+  it("shows toast when newsletter email is invalid", async () => {
+    const user = userEvent.setup();
+
+    await renderHome(<Home products={mockProducts} usedFallback={false} />);
+
+    await user.type(screen.getByLabelText("Email for newsletter"), "not-an-email");
+    await user.click(screen.getByRole("button", { name: "Subscribe" }));
+
+    expect(screen.getByRole("status")).toHaveTextContent("Please enter a valid email address.");
   });
 
   it("shows cart badge when cart has items in localStorage", async () => {

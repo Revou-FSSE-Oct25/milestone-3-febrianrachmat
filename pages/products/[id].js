@@ -10,35 +10,70 @@ export default function ProductDetailPage({ product }) {
 
   const handleAddToCart = () => {
     addToCart(product);
-    showToast("Added to cart!");
+    showToast("Added to cart");
   };
 
   return (
     <Layout>
-      <div className="grid items-start gap-16 md:grid-cols-[420px_1fr]">
-        <div>
-          <div className="relative h-[420px] w-full">
+      <nav className="app-text-muted mb-8 flex flex-wrap items-center gap-2 text-sm">
+        <Link href="/" className="link-editorial no-underline hover:no-underline">
+          Home
+        </Link>
+        <span aria-hidden="true">/</span>
+        <Link href="/#shop-collection" className="link-editorial no-underline hover:no-underline">
+          Collection
+        </Link>
+        <span aria-hidden="true">/</span>
+        <span>{product.title}</span>
+      </nav>
+
+      <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        <div className="luxury-surface app-panel overflow-hidden p-4 md:p-6">
+          <div className="app-chip relative aspect-[4/5] w-full overflow-hidden rounded-2xl md:aspect-square">
             <ProductImage
               src={product.image}
               alt={product.title}
               productId={product.id}
               priority
+              className="object-cover"
             />
           </div>
         </div>
 
-        <div>
-          <h1 className="mb-4 text-[28px] font-bold">{product.title}</h1>
-          <p className="mb-6 leading-relaxed text-gray-600">{product.description}</p>
-          <div className="mb-6 text-2xl font-bold">${product.price}</div>
+        <div className="lg:sticky lg:top-28">
+          {product.category && (
+            <p className="page-eyebrow">{product.category}</p>
+          )}
+          <h1 className="page-title mt-3">{product.title}</h1>
 
-          <button
-            type="button"
-            className="cursor-pointer bg-black px-7 py-3.5 text-sm font-semibold text-white transition active:scale-95"
-            onClick={handleAddToCart}
-          >
-            Add to Cart
-          </button>
+          <p className="mt-6 text-3xl font-semibold tracking-tight">
+            ${product.price}
+          </p>
+
+          {product.description && (
+            <p className="app-text-muted mt-6 max-w-lg text-base leading-relaxed">
+              {product.description}
+            </p>
+          )}
+
+          <div className="soft-divider my-8" />
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <button type="button" className="btn-luxury" onClick={handleAddToCart}>
+              Add to Cart
+            </button>
+            <Link
+              href="/cart"
+              className="btn-luxury-outline inline-flex items-center justify-center no-underline hover:no-underline"
+            >
+              View Cart
+            </Link>
+          </div>
+
+          <p className="app-text-muted mt-8 text-xs leading-relaxed tracking-wide">
+            Complimentary packaging on all orders. Estimated delivery 3–5 business days within
+            Indonesia.
+          </p>
         </div>
       </div>
     </Layout>

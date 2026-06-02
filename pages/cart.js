@@ -1,16 +1,11 @@
+import Link from "next/link";
 import Layout from "../components/layout";
 import ProductImage from "../components/productimage";
 import { useCart } from "../context/cartcontext";
 import { useRouter } from "next/router";
 
-const primaryBtnClass =
-  "cursor-pointer rounded-lg bg-black px-[30px] py-[15px] font-semibold text-white transition hover:opacity-90";
-
-const secondaryBtnClass =
-  "cursor-pointer rounded-lg bg-gray-500 px-5 py-2.5 font-semibold text-white transition hover:opacity-90";
-
 export default function CartPage() {
-  const { cart, increaseQty, decreaseQty, removeFromCart, clearCart, cartTotal } =
+  const { cart, increaseQty, decreaseQty, removeFromCart, clearCart, cartTotal, cartCount } =
     useCart();
 
   const router = useRouter();
@@ -18,14 +13,13 @@ export default function CartPage() {
   if (cart.length === 0) {
     return (
       <Layout>
-        <div className="py-10">
-          <h1 className="mb-8 text-4xl font-bold">Shopping Cart</h1>
-          <p className="text-lg text-gray-500">Your cart is empty</p>
-          <button
-            type="button"
-            className={`${primaryBtnClass} mt-6`}
-            onClick={() => router.push("/")}
-          >
+        <div className="luxury-surface app-panel mx-auto max-w-xl p-10 text-center md:p-14">
+          <p className="page-eyebrow">Your Bag</p>
+          <h1 className="page-title mt-3">The cart is empty</h1>
+          <p className="app-text-muted mt-4 text-sm">
+            Discover our curated collection — objects chosen with editorial intention.
+          </p>
+          <button type="button" className="btn-luxury mt-8" onClick={() => router.push("/")}>
             Continue Shopping
           </button>
         </div>
@@ -35,82 +29,116 @@ export default function CartPage() {
 
   return (
     <Layout>
-      <div className="py-10">
-        <h1 className="mb-8 text-4xl font-bold">Shopping Cart</h1>
+      <header className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="page-eyebrow">Your Bag</p>
+          <h1 className="page-title mt-2">Shopping Cart</h1>
+        </div>
+        <p className="app-text-muted text-sm">
+          {cartCount} {cartCount === 1 ? "piece" : "pieces"} selected
+        </p>
+      </header>
 
-        <div className="flex flex-col gap-5">
+      <div className="grid gap-10 lg:grid-cols-[1.4fr_0.6fr]">
+        <div className="flex flex-col gap-4">
           {cart.map((item) => (
-            <div
+            <article
               key={item.id}
-              className="flex items-center justify-between gap-5 rounded-xl border border-gray-200 p-5"
+              className="luxury-surface app-panel flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex flex-1 items-center gap-5">
-                <div className="relative h-[100px] w-[100px] shrink-0">
+                <div className="app-chip relative h-[110px] w-[110px] shrink-0 overflow-hidden rounded-2xl">
                   <ProductImage
                     src={item.image}
                     alt={item.title}
                     productId={item.id}
+                    className="object-cover"
                   />
                 </div>
 
-                <div className="flex flex-1 flex-col gap-1">
-                  <h3 className="text-base font-semibold">{item.title}</h3>
-                  <p className="font-semibold">${item.price}</p>
+                <div className="min-w-0 flex-1">
+                  <Link
+                    href={`/products/${item.id}`}
+                    className="font-serif text-xl no-underline hover:no-underline"
+                  >
+                    {item.title}
+                  </Link>
+                  <p className="mt-1 text-sm font-semibold">${item.price}</p>
 
-                  <div className="mt-2.5 flex items-center gap-2.5">
+                  <div className="qty-control mt-4">
                     <button
                       type="button"
                       aria-label={`Decrease quantity for ${item.title}`}
-                      className="h-[30px] w-[30px] cursor-pointer rounded-md bg-black text-white"
+                      className="qty-btn"
                       onClick={() => decreaseQty(item.id)}
                     >
                       -
                     </button>
-                    <span className="text-base font-bold">{item.quantity}</span>
+                    <span className="min-w-[1.5rem] text-center text-sm font-semibold">
+                      {item.quantity}
+                    </span>
                     <button
                       type="button"
                       aria-label={`Increase quantity for ${item.title}`}
-                      className="h-[30px] w-[30px] cursor-pointer rounded-md bg-black text-white"
+                      className="qty-btn"
                       onClick={() => increaseQty(item.id)}
                     >
                       +
                     </button>
                   </div>
-
-                  <p className="mt-2.5 font-bold">
-                    Subtotal: ${(item.price * item.quantity).toFixed(2)}
-                  </p>
                 </div>
               </div>
 
-              <button
-                type="button"
-                className="shrink-0 cursor-pointer rounded-md bg-rose-600 px-4 py-2.5 text-white transition hover:bg-rose-700"
-                onClick={() => removeFromCart(item.id)}
-              >
-                Remove
-              </button>
-            </div>
+              <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end">
+                <p className="app-text-muted text-sm font-semibold">
+                  ${(item.price * item.quantity).toFixed(2)}
+                </p>
+                <button
+                  type="button"
+                  className="app-text-muted text-xs tracking-[0.14em] uppercase underline-offset-4 transition hover:text-rose-700 hover:underline"
+                  onClick={() => removeFromCart(item.id)}
+                >
+                  Remove
+                </button>
+              </div>
+            </article>
           ))}
         </div>
 
-        <div className="mt-10 text-right">
-          <h2 className="mb-4 text-[22px] font-bold">Total: ${cartTotal.toFixed(2)}</h2>
+        <aside className="luxury-surface app-panel h-fit p-6 md:p-8 lg:sticky lg:top-28">
+          <p className="page-eyebrow">Summary</p>
+          <h2 className="mt-2 font-serif text-2xl">Order Total</h2>
 
-          <div className="flex flex-wrap justify-end gap-2.5">
-            <button type="button" className={secondaryBtnClass} onClick={clearCart}>
+          <div className="soft-divider my-6" />
+
+          <div className="app-text-muted space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>${cartTotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Shipping</span>
+              <span>Calculated at checkout</span>
+            </div>
+          </div>
+
+          <p className="mt-6 font-serif text-3xl font-medium">${cartTotal.toFixed(2)}</p>
+
+          <div className="mt-8 flex flex-col gap-3">
+            <button type="button" className="btn-luxury w-full" onClick={() => router.push("/checkout")}>
+              Proceed to Checkout
+            </button>
+            <button type="button" className="btn-luxury-muted w-full" onClick={clearCart}>
               Clear Cart
             </button>
-
-            <button
-              type="button"
-              className={primaryBtnClass}
-              onClick={() => router.push("/checkout")}
+            <Link
+              href="/#shop-collection"
+              className="link-editorial mt-2 text-center text-xs tracking-[0.16em] uppercase no-underline"
             >
-              Checkout
-            </button>
+              Continue Shopping
+            </Link>
           </div>
-        </div>
+        </aside>
       </div>
     </Layout>
   );

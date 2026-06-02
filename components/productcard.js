@@ -7,22 +7,28 @@ export default function ProductCard({ product }) {
   return (
     <Link
       href={detailHref}
-      className="flex flex-col border border-gray-200 bg-white p-5 no-underline transition hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:no-underline"
+      className="luxury-surface app-card group flex flex-col p-5 no-underline transition duration-500 hover:-translate-y-1 hover:shadow-[0_18px_34px_rgba(17,24,39,0.11)] hover:no-underline"
     >
-      <div className="relative mb-4 h-[260px] w-full">
+      <div className="app-chip relative mb-5 h-[270px] w-full overflow-hidden rounded-2xl">
         <ProductImage
           src={product.image}
           alt={product.title}
           productId={product.id}
+          className="object-contain transition duration-700 group-hover:scale-105"
         />
       </div>
 
-      <h3 className="mb-2 line-clamp-2 text-base font-semibold text-black">
+      <p className="app-text-muted mb-2 text-[11px] tracking-[0.16em] uppercase">
+        {product.category}
+      </p>
+      <h3 className="mb-2 line-clamp-2 font-serif text-xl font-medium">
         {product.title}
       </h3>
-      <p className="mb-3 font-semibold text-black">${product.price}</p>
+      <p className="mb-4 text-base font-semibold">${product.price}</p>
 
-      <span className="mt-auto text-sm text-black hover:underline">View Detail</span>
+      <span className="link-editorial app-text-muted mt-auto text-xs font-medium tracking-[0.18em] uppercase">
+        View Detail
+      </span>
     </Link>
   );
 }

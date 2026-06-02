@@ -35,46 +35,60 @@ export default function LoginPage() {
 
   return (
     <Layout>
-      <div className="mx-auto my-20 max-w-md">
-        <h1 className="mb-8 text-[32px] font-bold">Login</h1>
+      <div className="mx-auto max-w-md">
+        <div className="luxury-surface app-panel p-8 md:p-10">
+          <p className="page-eyebrow">Member Access</p>
+          <h1 className="page-title mt-2">Sign In</h1>
+          <p className="app-text-muted mt-3 text-sm">
+            Enter your credentials to access checkout and order history.
+          </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-3"
-            required
-          />
+          <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+            <label className="form-label">
+              Email
+              <input
+                type="email"
+                placeholder="you@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-input"
+                required
+              />
+            </label>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-3"
-            required
-          />
+            <label className="form-label">
+              Password
+              <input
+                type="password"
+                placeholder="Your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="form-input"
+                required
+              />
+            </label>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && (
+              <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+                {error}
+              </p>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="cursor-pointer rounded-md bg-black px-3 py-3 text-white disabled:opacity-50"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+            <button type="submit" disabled={loading} className="btn-luxury mt-2 w-full">
+              {loading ? "Signing In..." : "Sign In"}
+            </button>
+          </form>
+        </div>
 
-        <div className="mt-8 rounded-md bg-gray-100 p-4 text-sm text-gray-600">
-          <p className="mb-2 font-semibold text-gray-800">Demo credentials</p>
+        <div className="app-chip mt-6 rounded-2xl border border-[var(--line)] p-5 text-sm">
+          <p className="app-text-muted mb-2 text-xs font-semibold tracking-[0.14em] uppercase">
+            Demo credentials
+          </p>
           <p>
             User: <span className="font-mono">john@mail.com</span> /{" "}
             <span className="font-mono">changeme</span>
           </p>
-          <p>
+          <p className="mt-1">
             Admin: <span className="font-mono">admin@mail.com</span> /{" "}
             <span className="font-mono">admin123</span>
           </p>

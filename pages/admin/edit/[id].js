@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../../../components/layout";
 import ProductForm, { productToFormValues } from "../../../components/productform";
@@ -80,32 +81,42 @@ export default function EditProduct() {
 
   return (
     <Layout>
-      <div className="mx-auto my-20 max-w-lg">
-        <h1 className="mb-8 text-[32px] font-bold">Edit Product</h1>
+      <div className="mx-auto max-w-lg">
+        <Link
+          href="/admin"
+          className="link-editorial mb-6 inline-block text-xs tracking-[0.16em] uppercase no-underline"
+        >
+          Back to dashboard
+        </Link>
 
-        {loadingProduct ? (
-          <p className="text-lg text-gray-500">Loading product...</p>
-        ) : loadError ? (
-          <>
-            <p className="mb-4 text-sm text-red-600">{loadError}</p>
-            <button
-              type="button"
-              className="cursor-pointer rounded-lg bg-gray-500 px-5 py-2.5 font-semibold text-white transition hover:opacity-90"
-              onClick={() => router.push("/admin")}
-            >
-              Back to Admin
-            </button>
-          </>
-        ) : (
-          <ProductForm
-            initialValues={initialValues}
-            submitLabel="Update"
-            loadingLabel="Updating..."
-            loading={loading}
-            error={error}
-            onSubmit={handleSubmit}
-          />
-        )}
+        <div className="luxury-surface app-panel p-6 md:p-8">
+          <p className="page-eyebrow">Catalog</p>
+          <h1 className="page-title mt-2">Edit Product</h1>
+
+          {loadingProduct ? (
+            <p className="mt-6 text-sm app-text-muted">Loading product...</p>
+          ) : loadError ? (
+            <div className="mt-6">
+              <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+                {loadError}
+              </p>
+              <button type="button" className="btn-luxury-muted mt-4" onClick={() => router.push("/admin")}>
+                Back to Admin
+              </button>
+            </div>
+          ) : (
+            <div className="mt-8">
+              <ProductForm
+                initialValues={initialValues}
+                submitLabel="Update Product"
+                loadingLabel="Updating..."
+                loading={loading}
+                error={error}
+                onSubmit={handleSubmit}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </Layout>
   );

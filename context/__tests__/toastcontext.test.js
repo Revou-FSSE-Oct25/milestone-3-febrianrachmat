@@ -38,6 +38,23 @@ describe("ToastContext", () => {
     expect(screen.getByRole("status")).toHaveTextContent("Test message");
   });
 
+  it("dismisses toast when close button is clicked", async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+
+    render(
+      <ToastProvider>
+        <TestComponent />
+      </ToastProvider>
+    );
+
+    await user.click(screen.getByText("Show Toast"));
+    expect(screen.getByRole("status")).toBeInTheDocument();
+
+    await user.click(screen.getByLabelText("Dismiss notification"));
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
   it("hides toast after timeout", async () => {
     const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
 
@@ -51,7 +68,7 @@ describe("ToastContext", () => {
     expect(screen.getByRole("status")).toBeInTheDocument();
 
     act(() => {
-      jest.advanceTimersByTime(3000);
+      jest.advanceTimersByTime(4000);
     });
 
     expect(screen.queryByRole("status")).not.toBeInTheDocument();

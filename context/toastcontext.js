@@ -6,28 +6,47 @@ export function ToastProvider({ children }) {
   const [toast, setToast] = useState(null);
   const timeoutRef = useRef(null);
 
-  const showToast = useCallback((message) => {
+  const dismissToast = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
-
-    setToast({ message, id: Date.now() });
-
-    timeoutRef.current = setTimeout(() => {
-      setToast(null);
-    }, 3000);
+    setToast(null);
   }, []);
 
+  const showToast = useCallback(
+    (message) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      setToast({ message, id: Date.now() });
+
+      timeoutRef.current = setTimeout(() => {
+        setToast(null);
+        timeoutRef.current = null;
+      }, 4000);
+    },
+    []
+  );
+
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={{ showToast, dismissToast }}>
       {children}
       {toast && (
-        <div
-          className="fixed bottom-6 right-6 z-[2000] animate-[toast-in_0.25s_ease] rounded-lg bg-black px-5 py-3.5 text-sm font-medium text-white shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
-          role="status"
-          key={toast.id}
-        >
-          {toast.message}
+        <div className="toast-luxury" role="status" key={toast.id}>
+          <div className="min-w-0 flex-1">
+            <p className="toast-luxury__eyebrow">ETERE</p>
+            <p className="toast-luxury__message">{toast.message}</p>
+          </div>
+          <button
+            type="button"
+            className="toast-luxury__dismiss"
+            aria-label="Dismiss notification"
+            onClick={dismissToast}
+          >
+            ×
+          </button>
         </div>
       )}
     </ToastContext.Provider>

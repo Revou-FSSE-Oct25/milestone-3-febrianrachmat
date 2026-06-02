@@ -6,28 +6,31 @@ exports[`ProductCard Component matches snapshot 1`] = `
     href="/products/1"
   >
     <div
-      class="relative mb-4 h-[260px] w-full"
+      class="app-chip relative mb-5 h-[270px] w-full overflow-hidden rounded-2xl"
     >
       <img
         alt="Test Product"
-        class="absolute inset-0 h-full w-full object-contain "
+        class="absolute inset-0 h-full w-full object-contain transition duration-700 group-hover:scale-105 "
         decoding="async"
         loading="lazy"
         src="https://i.imgur.com/sample.jpg"
       />
     </div>
+    <p
+      class="app-text-muted mb-2 text-[11px] tracking-[0.16em] uppercase"
+    />
     <h3
-      class="mb-2 line-clamp-2 text-base font-semibold text-black"
+      class="mb-2 line-clamp-2 font-serif text-xl font-medium"
     >
       Test Product
     </h3>
     <p
-      class="mb-3 font-semibold text-black"
+      class="mb-4 text-base font-semibold"
     >
       $100
     </p>
     <span
-      class="mt-auto text-sm text-black hover:underline"
+      class="link-editorial app-text-muted mt-auto text-xs font-medium tracking-[0.18em] uppercase"
     >
       View Detail
     </span>

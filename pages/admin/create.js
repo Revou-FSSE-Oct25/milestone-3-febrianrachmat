@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../../components/layout";
 import ProductForm from "../../components/productform";
@@ -53,16 +54,31 @@ export default function CreateProduct() {
 
   return (
     <Layout>
-      <div className="mx-auto my-20 max-w-lg">
-        <h1 className="mb-8 text-[32px] font-bold">Create Product</h1>
+      <div className="mx-auto max-w-lg">
+        <Link
+          href="/admin"
+          className="link-editorial mb-6 inline-block text-xs tracking-[0.16em] uppercase no-underline"
+        >
+          Back to dashboard
+        </Link>
 
-        <ProductForm
-          submitLabel="Create"
-          loadingLabel="Creating..."
-          loading={loading}
-          error={error}
-          onSubmit={handleSubmit}
-        />
+        <div className="luxury-surface app-panel p-6 md:p-8">
+          <p className="page-eyebrow">Catalog</p>
+          <h1 className="page-title mt-2">Create Product</h1>
+          <p className="mt-3 text-sm app-text-muted">
+            Add a new piece to the collection with imagery and editorial details.
+          </p>
+
+          <div className="mt-8">
+            <ProductForm
+              submitLabel="Create Product"
+              loadingLabel="Creating..."
+              loading={loading}
+              error={error}
+              onSubmit={handleSubmit}
+            />
+          </div>
+        </div>
       </div>
     </Layout>
   );

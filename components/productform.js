@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-const inputClass =
-  "rounded-md border border-gray-300 px-3 py-3 text-sm focus:border-black focus:outline-none";
 const emptyForm = {
   title: "",
   price: "",
@@ -50,80 +48,95 @@ export default function ProductForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <input
-        type="text"
-        placeholder="Product Title"
-        value={values.title}
-        onChange={handleChange("title")}
-        className={inputClass}
-        required
-      />
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <label className="form-label">
+        Product Title
+        <input
+          type="text"
+          placeholder="e.g. Linen Overshirt"
+          value={values.title}
+          onChange={handleChange("title")}
+          className="form-input"
+          required
+        />
+      </label>
 
-      <input
-        type="number"
-        placeholder="Price"
-        value={values.price}
-        onChange={handleChange("price")}
-        min="0"
-        step="0.01"
-        className={inputClass}
-        required
-      />
+      <label className="form-label">
+        Price (USD)
+        <input
+          type="number"
+          placeholder="0.00"
+          value={values.price}
+          onChange={handleChange("price")}
+          min="0"
+          step="0.01"
+          className="form-input"
+          required
+        />
+      </label>
 
-      <textarea
-        placeholder="Description"
-        value={values.description}
-        onChange={handleChange("description")}
-        rows={4}
-        className={inputClass}
-        required
-      />
+      <label className="form-label">
+        Description
+        <textarea
+          placeholder="A concise product description..."
+          value={values.description}
+          onChange={handleChange("description")}
+          rows={4}
+          className="form-textarea"
+          required
+        />
+      </label>
 
-      <input
-        type="text"
-        placeholder="Category"
-        value={values.category}
-        onChange={handleChange("category")}
-        className={inputClass}
-        required
-      />
+      <label className="form-label">
+        Category
+        <input
+          type="text"
+          placeholder="e.g. fashion, beauty, home"
+          value={values.category}
+          onChange={handleChange("category")}
+          className="form-input"
+          required
+        />
+      </label>
 
-      <input
-        type="url"
-        placeholder="Image URL (https://...)"
-        value={values.image}
-        onChange={handleChange("image")}
-        className={inputClass}
-        required
-      />
+      <label className="form-label">
+        Image URL
+        <input
+          type="url"
+          placeholder="https://..."
+          value={values.image}
+          onChange={handleChange("image")}
+          className="form-input"
+          required
+        />
+      </label>
 
       {values.image.trim() && (
-        <div className="rounded-md border border-gray-200 p-3">
-          <p className="mb-2 text-sm font-medium text-gray-700">Image preview</p>
-          <div className="flex h-[200px] items-center justify-center">
+        <div className="overflow-hidden rounded-2xl border border-black/8 bg-[#f2ede5] p-4">
+          <p className="mb-3 text-xs tracking-[0.14em] uppercase text-black/50">Image Preview</p>
+          <div className="flex h-[220px] items-center justify-center">
             {!previewError ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={values.image.trim()}
                 alt="Product preview"
-                className="max-h-[200px] max-w-full object-contain"
+                className="max-h-[220px] max-w-full rounded-xl object-contain"
                 onError={() => setPreviewError(true)}
               />
             ) : (
-              <p className="text-sm text-red-600">Unable to load image preview.</p>
+              <p className="text-sm text-rose-700">Unable to load image preview.</p>
             )}
           </div>
         </div>
       )}
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+          {error}
+        </p>
+      )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="cursor-pointer rounded-md bg-black px-3 py-3 text-white disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} className="btn-luxury w-full sm:w-auto">
         {loading ? loadingLabel : submitLabel}
       </button>
     </form>
