@@ -4,7 +4,10 @@ import {
   setProducts,
 } from "../../../lib/products-data";
 import { requireAdmin } from "../../../lib/require-admin";
-import { validateProductInput } from "../../../lib/validate-product";
+import {
+  normalizeProductFields,
+  validateProductInput,
+} from "../../../lib/validate-product";
 
 async function revalidateHome(res) {
   try {
@@ -24,18 +27,15 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     if (!requireAdmin(req, res)) return;
 
-    const { title, price } = req.body;
-    const validationError = validateProductInput({ title, price });
+    const validationError = validateProductInput(req.body);
 
     if (validationError) {
       return res.status(400).json({ message: validationError });
     }
 
     const newProduct = {
-      ...req.body,
       id: Date.now(),
-      title: title.trim(),
-      price: Number(price),
+      ...normalizeProductFields(req.body),
     };
 
     const products = getProducts();

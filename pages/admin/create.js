@@ -1,20 +1,24 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "../../components/layout";
+import ProductForm from "../../components/productform";
+import { validateProductInput } from "../../lib/validate-product";
 
 export default function CreateProduct() {
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     setError(null);
 
-    if (!title.trim() || !price) {
-      setError("All fields required");
+    const validationError = validateProductInput({
+      ...values,
+      price: Number(values.price),
+    });
+
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
@@ -27,8 +31,8 @@ export default function CreateProduct() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title,
-          price: Number(price),
+          ...values,
+          price: Number(values.price),
         }),
       });
 
@@ -49,40 +53,16 @@ export default function CreateProduct() {
 
   return (
     <Layout>
-      <div className="mx-auto my-20 max-w-md">
+      <div className="mx-auto my-20 max-w-lg">
         <h1 className="mb-8 text-[32px] font-bold">Create Product</h1>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <input
-            type="text"
-            placeholder="Product Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-3"
-            required
-          />
-
-          <input
-            type="number"
-            placeholder="Price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            min="0"
-            step="0.01"
-            className="rounded-md border border-gray-300 px-3 py-3"
-            required
-          />
-
-          {error && <p className="text-sm text-red-600">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="cursor-pointer rounded-md bg-black px-3 py-3 text-white disabled:opacity-50"
-          >
-            {loading ? "Creating..." : "Create"}
-          </button>
-        </form>
+        <ProductForm
+          submitLabel="Create"
+          loadingLabel="Creating..."
+          loading={loading}
+          error={error}
+          onSubmit={handleSubmit}
+        />
       </div>
     </Layout>
   );

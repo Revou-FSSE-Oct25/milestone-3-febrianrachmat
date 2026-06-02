@@ -84,4 +84,19 @@ describe('Middleware', () => {
     expect(res.status).toBe(200)
     expect(NextResponse.next).toHaveBeenCalled()
   })
+
+  it('redirects to login when accessing orders without token', () => {
+    const req = {
+      url: 'http://localhost:3000/orders',
+      nextUrl: { pathname: '/orders' },
+      cookies: mockCookies(),
+    }
+
+    const res = middleware(req)
+
+    expect(res.status).toBe(307)
+    expect(NextResponse.redirect).toHaveBeenCalledWith(
+      new URL('/login?redirect=%2Forders', req.url)
+    )
+  })
 })

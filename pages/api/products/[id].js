@@ -5,7 +5,10 @@ import {
   setProducts,
 } from "../../../lib/products-data";
 import { requireAdmin } from "../../../lib/require-admin";
-import { validateProductInput } from "../../../lib/validate-product";
+import {
+  normalizeProductFields,
+  validateProductInput,
+} from "../../../lib/validate-product";
 
 async function revalidateHome(res) {
   try {
@@ -40,8 +43,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const { title, price } = req.body;
-    const validationError = validateProductInput({ title, price });
+    const validationError = validateProductInput(req.body);
 
     if (validationError) {
       return res.status(400).json({ message: validationError });
@@ -49,9 +51,7 @@ export default async function handler(req, res) {
 
     const products = getProducts();
     const updatedProducts = products.map((p) =>
-      p.id === productId
-        ? { ...p, title: title.trim(), price: Number(price) }
-        : p
+      p.id === productId ? { ...p, ...normalizeProductFields(req.body) } : p
     );
 
     setProducts(updatedProducts);

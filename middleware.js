@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { isAdminUsername } from "./lib/admin-users";
 
 function isProtectedRoute(pathname) {
-  return pathname === "/checkout" || pathname.startsWith("/admin");
+  return pathname === "/checkout" || pathname === "/orders" || pathname.startsWith("/admin");
 }
 
 export function middleware(req) {
@@ -32,5 +32,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/checkout", "/admin", "/admin/:path*"],
+  matcher: ["/checkout", "/orders", "/admin", "/admin/:path*"],
 };

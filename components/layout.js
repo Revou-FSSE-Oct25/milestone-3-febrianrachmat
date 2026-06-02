@@ -96,6 +96,14 @@ export default function Layout({ children }) {
                       Checkout
                     </Link>
 
+                    <Link
+                      href="/orders"
+                      className="block cursor-pointer rounded-md p-2 text-sm no-underline transition hover:bg-gray-100 hover:no-underline"
+                      role="menuitem"
+                    >
+                      Orders
+                    </Link>
+
                     {isAdmin && (
                       <Link
                         href="/admin"
