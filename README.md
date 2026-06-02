@@ -180,6 +180,34 @@ Password: m38rmF$
 
 ---
 
+# Automated Tests
+
+Jalankan unit test dengan Jest + React Testing Library:
+
+```bash
+npm test
+```
+
+Hasil saat ini: **15 test suites**, **64 tests** — semua pass.
+
+Coverage utama:
+
+| Area | File test |
+|------|-----------|
+| Home page & ISR | `__tests__/pages/index.test.js` |
+| Cart & auth context | `context/__tests__/cartcontext.test.js`, `context/__tests__/authcontext.test.js` |
+| Middleware (protected routes) | `middleware.test.js` |
+| Checkout & order flow | `lib/__tests__/order-storage.test.js` — validasi form (`validateCheckoutForm`), simpan order, payload checkout |
+| Product API & normalisasi | `lib/__tests__/fetch-product.test.js`, `lib/__tests__/normalize-api.test.js` |
+
+Verifikasi build production:
+
+```bash
+npm run build
+```
+
+---
+
 # Testing Flow
 
 Test scenario yang bisa dilakukan:

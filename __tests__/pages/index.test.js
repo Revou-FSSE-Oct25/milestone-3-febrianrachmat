@@ -2,6 +2,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Home from "../../pages/index";
 import { renderWithProviders } from "../../test-utils/renderWithProviders";
+import { fetchCategories } from "../../lib/fetch-categories";
 
 jest.mock("../../lib/fetch-categories", () => ({
   fetchCategories: jest.fn().mockResolvedValue([]),
@@ -24,29 +25,39 @@ const mockProducts = [
   },
 ];
 
+async function renderHome(ui) {
+  renderWithProviders(ui);
+
+  await waitFor(() => {
+    expect(fetchCategories).toHaveBeenCalled();
+  });
+}
+
 describe("Home Page", () => {
   beforeEach(() => {
     localStorage.clear();
+    fetchCategories.mockClear();
+    fetchCategories.mockResolvedValue([]);
   });
 
-  it("renders with mock data", () => {
-    renderWithProviders(<Home products={mockProducts} usedFallback={false} />);
+  it("renders with mock data", async () => {
+    await renderHome(<Home products={mockProducts} usedFallback={false} />);
 
     expect(screen.getByText("Product 1")).toBeInTheDocument();
     expect(screen.getByText("Product 2")).toBeInTheDocument();
   });
 
-  it("does not require login to browse products", () => {
+  it("does not require login to browse products", async () => {
     localStorage.clear();
 
-    renderWithProviders(<Home products={mockProducts} usedFallback={false} />);
+    await renderHome(<Home products={mockProducts} usedFallback={false} />);
 
     expect(screen.getByText("RevoShop Products")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Login" })).toBeInTheDocument();
   });
 
-  it("shows fallback banner when API data is unavailable", () => {
-    renderWithProviders(<Home products={mockProducts} usedFallback={true} />);
+  it("shows fallback banner when API data is unavailable", async () => {
+    await renderHome(<Home products={mockProducts} usedFallback={true} />);
 
     expect(
       screen.getByText(/Product API is unavailable/i)
@@ -56,7 +67,7 @@ describe("Home Page", () => {
   it("filters products by search query", async () => {
     const user = userEvent.setup();
 
-    renderWithProviders(<Home products={mockProducts} usedFallback={false} />);
+    await renderHome(<Home products={mockProducts} usedFallback={false} />);
 
     await user.type(screen.getByPlaceholderText("Search by product name..."), "Product 2");
 
@@ -64,14 +75,14 @@ describe("Home Page", () => {
     expect(screen.getByText("Product 2")).toBeInTheDocument();
   });
 
-  it("renders empty state", () => {
-    renderWithProviders(<Home products={[]} usedFallback={false} />);
+  it("renders empty state", async () => {
+    await renderHome(<Home products={[]} usedFallback={false} />);
 
     expect(screen.queryByText("Product 1")).not.toBeInTheDocument();
   });
 
-  it("renders layout with auth and cart providers", () => {
-    renderWithProviders(<Home products={mockProducts} usedFallback={false} />);
+  it("renders layout with auth and cart providers", async () => {
+    await renderHome(<Home products={mockProducts} usedFallback={false} />);
 
     expect(screen.getByText("RevoShop")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Cart" })).toHaveAttribute("href", "/cart");
@@ -84,11 +95,9 @@ describe("Home Page", () => {
       JSON.stringify([{ id: 1, price: 100, quantity: 2 }])
     );
 
-    renderWithProviders(<Home products={mockProducts} usedFallback={false} />);
+    await renderHome(<Home products={mockProducts} usedFallback={false} />);
 
-    await waitFor(() => {
-      expect(screen.getByText("2")).toBeInTheDocument();
-    });
+    expect(screen.getByText("2")).toBeInTheDocument();
   });
 });
 
