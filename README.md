@@ -33,6 +33,9 @@ RevoShop adalah aplikasi e-commerce modern yang dibangun menggunakan **Next.js**
 - Modern responsive navbar
 - Profile avatar
 - Cart badge indicator
+- Toast notification system
+- ErrorBoundary fallback UI
+- Promo/FAQ links tampil di breakpoint `sm` ke atas (mobile-first responsive)
 
 ---
 
@@ -242,6 +245,8 @@ Features include:
 - Product grid layout
 - Clean checkout page
 - Toast notification system
+- Error boundary fallback screen untuk menangani error runtime
+- Quantity controls di cart memakai `aria-label` untuk aksesibilitas dasar
 
 ---
 

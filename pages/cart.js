@@ -60,6 +60,7 @@ export default function CartPage() {
                   <div className="mt-2.5 flex items-center gap-2.5">
                     <button
                       type="button"
+                      aria-label={`Decrease quantity for ${item.title}`}
                       className="h-[30px] w-[30px] cursor-pointer rounded-md bg-black text-white"
                       onClick={() => decreaseQty(item.id)}
                     >
@@ -68,6 +69,7 @@ export default function CartPage() {
                     <span className="text-base font-bold">{item.quantity}</span>
                     <button
                       type="button"
+                      aria-label={`Increase quantity for ${item.title}`}
                       className="h-[30px] w-[30px] cursor-pointer rounded-md bg-black text-white"
                       onClick={() => increaseQty(item.id)}
                     >
