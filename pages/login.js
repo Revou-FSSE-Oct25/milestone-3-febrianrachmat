@@ -1,10 +1,10 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import { AuthContext } from "../context/authcontext";
+import { useAuth } from "../context/authcontext";
 import Layout from "../components/layout";
 
 export default function LoginPage() {
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const router = useRouter();
 
   const [username, setUsername] = useState("");

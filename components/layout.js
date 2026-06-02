@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { useContext, useState, useRef, useEffect } from "react";
-import { CartContext } from "../context/cartcontext";
-import { AuthContext } from "../context/authcontext";
+import { useState, useRef, useEffect } from "react";
+import { useCart } from "../context/cartcontext";
+import { useAuth } from "../context/authcontext";
 
 export default function Layout({ children }) {
-  const { cartCount } = useContext(CartContext);
-  const { user, logout } = useContext(AuthContext);
+  const { cartCount } = useCart();
+  const { user, logout } = useAuth();
 
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
