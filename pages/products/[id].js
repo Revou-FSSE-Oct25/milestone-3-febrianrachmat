@@ -29,23 +29,7 @@ export default function ProductDetail({ product }) {
   );
 }
 
-// 🔥 Generate semua product paths saat build
-export async function getStaticPaths() {
-  const res = await fetch("https://fakestoreapi.com/products");
-  const products = await res.json();
-
-  const paths = products.map((product) => ({
-    params: { id: product.id.toString() },
-  }));
-
-  return {
-    paths,
-    fallback: "blocking", // Generate page jika belum ada
-  };
-}
-
-// 🔥 ISR untuk setiap product
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const res = await fetch(
     `https://fakestoreapi.com/products/${params.id}`
   );
@@ -58,6 +42,5 @@ export async function getStaticProps({ params }) {
 
   return {
     props: { product },
-    revalidate: 60, // regenerate setiap 60 detik
   };
 }

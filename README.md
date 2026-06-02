@@ -48,6 +48,22 @@ RevoShop adalah aplikasi e-commerce modern yang dibangun menggunakan **Next.js**
 
 ---
 
+# Rendering Strategy (Module 4)
+
+Ringkasan pola rendering di aplikasi ini:
+
+| Halaman | Pola | Implementasi |
+|---------|------|----------------|
+| `/` (Home) | **ISR** (SSG + revalidate) | `getStaticProps` + `revalidate: 60` |
+| `/products/[id]` | **SSR** | `getServerSideProps` — data produk di-fetch di server pada setiap request |
+| `/cart`, `/admin`, `/login`, dll. | **CSR** | React Context + `fetch` di client |
+
+**Product detail memakai SSR** sesuai brief Module 4: harga dan stok (data produk) diambil fresh dari FakeStoreAPI saat user membuka halaman, bukan dari cache build statis.
+
+Home tetap memakai ISR agar daftar produk cepat di-load dengan regenerasi berkala (60 detik), sementara halaman detail memenuikan requirement SSR secara eksplisit.
+
+---
+
 # Authentication Flow
 
 ```
