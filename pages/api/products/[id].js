@@ -1,4 +1,4 @@
-import { getProducts, setProducts } from "./data";
+import { getProducts, setProducts } from "../../../lib/products-data";
 
 export default function handler(req, res) {
   const { id } = req.query;

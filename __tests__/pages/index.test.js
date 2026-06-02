@@ -1,6 +1,17 @@
 import { render, screen } from '@testing-library/react'
-import Home, { getStaticProps } from '../index'
+import Home, { getStaticProps } from '../../pages/index'
 import { CartProvider } from '../../context/cartcontext'
+import { AuthProvider } from '../../context/authcontext'
+
+function renderHome(products) {
+  return render(
+    <AuthProvider>
+      <CartProvider>
+        <Home products={products} />
+      </CartProvider>
+    </AuthProvider>
+  )
+}
 
 const mockProducts = [
   { id: 1, title: 'Product 1', price: 100, image: 'img1.jpg' },
@@ -9,22 +20,14 @@ const mockProducts = [
 
 describe('Home Page', () => {
   it('renders with mock data', () => {
-    render(
-      <CartProvider>
-        <Home products={mockProducts} />
-      </CartProvider>
-    )
+    renderHome(mockProducts)
 
     expect(screen.getByText('Product 1')).toBeInTheDocument()
     expect(screen.getByText('Product 2')).toBeInTheDocument()
   })
 
   it('renders empty state', () => {
-    render(
-      <CartProvider>
-        <Home products={[]} />
-      </CartProvider>
-    )
+    renderHome([])
 
     expect(screen.queryByText('Product 1')).not.toBeInTheDocument()
   })
@@ -47,8 +50,8 @@ describe('getStaticProps', () => {
     const result = await getStaticProps()
 
     expect(result).toEqual({
-  props: { products: mockProducts },
-  revalidate: 60
-})
+      props: { products: mockProducts },
+      revalidate: 60,
+    })
   })
 })
