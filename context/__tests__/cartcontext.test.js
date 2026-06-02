@@ -3,11 +3,12 @@ import userEvent from '@testing-library/user-event'
 import { CartProvider, useCart } from '../cartcontext'
 
 function TestComponent() {
-  const { cart, addToCart, removeFromCart, cartTotal } = useCart()
+  const { cart, addToCart, removeFromCart, cartTotal, cartCount } = useCart()
 
   return (
     <div>
       <span data-testid="cart-length">{cart.length}</span>
+      <span data-testid="cart-count">{cartCount}</span>
       <span data-testid="cart-total">{cartTotal}</span>
 
       <button onClick={() => addToCart({ id: 1, price: 10 })}>
@@ -35,6 +36,7 @@ describe('CartContext', () => {
     await userEvent.click(screen.getByText('Add'))
 
     expect(screen.getByTestId('cart-length').textContent).toBe('1')
+    expect(screen.getByTestId('cart-count').textContent).toBe('1')
   })
 
   it('removes item from cart', async () => {
@@ -49,6 +51,21 @@ describe('CartContext', () => {
 
     await userEvent.click(screen.getByText('Remove'))
     expect(screen.getByTestId('cart-length').textContent).toBe('0')
+    expect(screen.getByTestId('cart-count').textContent).toBe('0')
+  })
+
+  it('increments cartCount when adding the same item twice', async () => {
+    render(
+      <CartProvider>
+        <TestComponent />
+      </CartProvider>
+    )
+
+    await userEvent.click(screen.getByText('Add'))
+    await userEvent.click(screen.getByText('Add'))
+
+    expect(screen.getByTestId('cart-length').textContent).toBe('1')
+    expect(screen.getByTestId('cart-count').textContent).toBe('2')
   })
 
   it('calculates cart total correctly', async () => {
